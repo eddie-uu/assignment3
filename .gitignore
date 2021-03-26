@@ -1,5 +1,5 @@
 pom.xml
 ./bin/*
 ./target/*
-./bin
-./target
+bin/
+target/
