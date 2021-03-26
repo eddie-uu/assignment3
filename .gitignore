@@ -1,3 +1,5 @@
 pom.xml
 ./bin/*
 ./target/*
+./bin
+./target
