@@ -86,32 +86,58 @@ public class Group13_OM extends OpponentModel {
 		// Return if heuristic is uncheckable
 		if (negotiationSession.getOpponentBidHistory().size() < 2) { return; }
 		
-		List<Issue> opponentBidIssues = opponentBid.getIssues();
+		
 		BidDetails previousOpponentBid = negotiationSession.getOpponentBidHistory()
 										 	.getHistory()
 											.get(negotiationSession.getOpponentBidHistory().size() - 2);
+		Bid previousOpponentBidValues = previousOpponentBid.getBid();
 		
 		// Influence of heuristic
 		double heuristic = opponentBid.getDistance(previousOpponentBid.getBid());
 		// Influence of time
 		double totalTime = time;
 
-		Iterator<Entry<Integer, Value>> iterator = opponentBid.getValues().entrySet().iterator();
+		// Current opponent's bid values it offered
+		Iterator<Entry<Integer, Value>> opponentBidIterator = opponentBid.getValues().entrySet().iterator();
+		// Iterator<Entry<Integer, Value>> previousOpponentBidIterator = previousOpponentBidValues.getValues().entrySet().iterator();
 		ArrayList<String> bidValues = new ArrayList<String>();
+
+		// NOTE: OpponentBidIssues have the same index as iterator, might become useful later on
+		List<Issue> opponentBidIssues = opponentBid.getIssues();
+		HashMap<String, Boolean> sameValues = new HashMap<String, Boolean>();
 		
-		while (iterator.hasNext()) {
-			Map.Entry pair = (Map.Entry) iterator.next();
+		while (opponentBidIterator.hasNext()) {
+			Map.Entry pair = (Map.Entry) opponentBidIterator.next();
+			
 			bidValues.add(pair.getValue().toString());
-			iterator.remove();
+			
+			Value comparison = previousOpponentBidValues.getValue((int) pair.getKey());
+			Issue name = opponentBidIssues.get((int) pair.getKey() - 1);
+			sameValues.put(name.getName(), comparison == pair.getValue());
+			
+			opponentBidIterator.remove();
 		}
 
+
+		double defaultWeight = (1D - 0.1) / amountOfIssues;
+		
+		// For each evaluator
 		for (Entry<Objective, Evaluator> evaluator : opponentUtilitySpace.getEvaluators()) {
+			// Set the weight of the evaluator if the value was the same as the previous bid
+			if (sameValues.get(evaluator.getKey().toString())) {
+				evaluator.getValue().setWeight(defaultWeight + 0.1);
+			} else {
+				evaluator.getValue().setWeight(defaultWeight);
+			}
+			
+			// For each value in evaluator
 			for (ValueDiscrete valueDiscrete : ((IssueDiscrete) evaluator.getKey()).getValues()) {
 				double currentValue = 1;
 				try {
 					currentValue = ((EvaluatorDiscrete) evaluator.getValue()).getEvaluation(valueDiscrete);
 				} catch (Exception e) { }
 				
+				// Increase or decrease value if offered in bid or not
 				if (bidValues.contains(valueDiscrete.getValue().toString())) {
 					currentValue += 1;
 				} else if (currentValue > 1) {
