@@ -1,7 +1,11 @@
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -21,59 +25,34 @@ import genius.core.utility.AdditiveUtilitySpace;
 import genius.core.utility.Evaluator;
 import genius.core.utility.EvaluatorDiscrete;
 
-/**
- * BOA framework implementation of the HardHeaded Frequecy Model.
- * 
- * Default: learning coef l = 0.2; learnValueAddition v = 1.0
- * 
- * paper: https://ii.tudelft.nl/sites/default/files/boa.pdf
- */
 public class Group13_OM extends OpponentModel {
-
-	/*
-	 * the learning coefficient is the weight that is added each turn to the
-	 * issue weights which changed. It's a trade-off between concession speed
-	 * and accuracy.
-	 */
-	private double learnCoef;
-	/*
-	 * value which is added to a value if it is found. Determines how fast the
-	 * value weights converge.
-	 */
-	private int learnValueAddition;
 	private int amountOfIssues;
-	private double goldenValue;
+	private HashMap<String, Integer> frequency;
+	private double minModifier;
+	private double maxModifier;
+	private double modifierScaling;
 	
 	@Override
 	public void init(NegotiationSession negotiationSession, Map<String, Double> parameters) {
 		this.negotiationSession = negotiationSession;
-		if (parameters != null && parameters.get("l") != null) {
-			learnCoef = parameters.get("l");
-		} else {
-			learnCoef = 0.2;
-		}
-		learnValueAddition = 1;
+		
 		opponentUtilitySpace = (AdditiveUtilitySpace) negotiationSession.getUtilitySpace().copy();
-		amountOfIssues = opponentUtilitySpace.getDomain().getIssues().size();
-		/*
-		 * This is the value to be added to weights of unchanged issues before
-		 * normalization. Also the value that is taken as the minimum possible
-		 * weight, (therefore defining the maximum possible also).
-		 */
-		goldenValue = learnCoef / amountOfIssues;
-
+		amountOfIssues 		 = opponentUtilitySpace.getDomain().getIssues().size();
+		frequency 			 = new HashMap<String, Integer>();
+		minModifier			 = 0.01;
+		maxModifier			 = 0.1;
+		modifierScaling		 = 0.001;
+		
 		generateModel();
 	}
 
-	/**
-	 * Init to flat weight (and flat evaluation???) distribution
-	 */
 	private void generateModel() {
 		double defaultWeight = 1D / amountOfIssues;
 
 		for (Entry<Objective, Evaluator> evaluator : opponentUtilitySpace.getEvaluators()) {
 			opponentUtilitySpace.unlock(evaluator.getKey());
 			evaluator.getValue().setWeight(defaultWeight);
+			frequency.put(evaluator.getKey().toString(), 0);
 
 			for (ValueDiscrete valueDiscrete : ((IssueDiscrete) evaluator.getKey()).getValues()) {
 				((EvaluatorDiscrete) evaluator.getValue()).setEvaluation(valueDiscrete, 1);
@@ -81,9 +60,9 @@ public class Group13_OM extends OpponentModel {
 		}
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public void updateModel(Bid opponentBid, double time) {
-		// Return if heuristic is uncheckable
 		if (negotiationSession.getOpponentBidHistory().size() < 2) { return; }
 		
 		
@@ -92,42 +71,62 @@ public class Group13_OM extends OpponentModel {
 											.get(negotiationSession.getOpponentBidHistory().size() - 2);
 		Bid previousOpponentBidValues = previousOpponentBid.getBid();
 		
-		// Influence of heuristic
-		double heuristic = opponentBid.getDistance(previousOpponentBid.getBid());
-		// Influence of time
+		// Influence of time todo: scaling increasing with this
 		double totalTime = time;
 
 		// Current opponent's bid values it offered
 		Iterator<Entry<Integer, Value>> opponentBidIterator = opponentBid.getValues().entrySet().iterator();
-		// Iterator<Entry<Integer, Value>> previousOpponentBidIterator = previousOpponentBidValues.getValues().entrySet().iterator();
 		ArrayList<String> bidValues = new ArrayList<String>();
 
-		// NOTE: OpponentBidIssues have the same index as iterator, might become useful later on
 		List<Issue> opponentBidIssues = opponentBid.getIssues();
 		HashMap<String, Boolean> sameValues = new HashMap<String, Boolean>();
+
+		int sameBid = 0;
 		
 		while (opponentBidIterator.hasNext()) {
-			Map.Entry pair = (Map.Entry) opponentBidIterator.next();
+			Map.Entry pair 	 	 = (Map.Entry) opponentBidIterator.next();
+			Value comparison 	 = previousOpponentBidValues.getValue((int) pair.getKey());
+			Issue name 			 = opponentBidIssues.get((int) pair.getKey() - 1);
+			int currentFrequency = frequency.get(name.getName()) + 1;
+
+			if (comparison == pair.getValue()) {
+				frequency.put(name.getName(), currentFrequency);
+				sameBid++;
+			}
 			
 			bidValues.add(pair.getValue().toString());
-			
-			Value comparison = previousOpponentBidValues.getValue((int) pair.getKey());
-			Issue name = opponentBidIssues.get((int) pair.getKey() - 1);
 			sameValues.put(name.getName(), comparison == pair.getValue());
-			
 			opponentBidIterator.remove();
 		}
 
-
-		double defaultWeight = (1D - 0.1) / amountOfIssues;
+		
+		ArrayList<Integer> worth = new ArrayList<Integer>();
+		int budget = 0;
+		double best40Percent = sameBid * 0.6;
+		
+		for (int i = sameBid; i > 0; i--) {
+			int value = i > best40Percent ? i : 1;
+			worth.add(value);
+			budget += value;
+		}
+		
+		double budgetToSame  = amountOfIssues != sameBid ? maxModifier / budget : 0;
+		double reducedWeight = amountOfIssues != sameBid ? maxModifier / amountOfIssues : 0;
+		
+		frequency = sortByValue(frequency);
 		
 		// For each evaluator
+		int ranking = 0;
+		
 		for (Entry<Objective, Evaluator> evaluator : opponentUtilitySpace.getEvaluators()) {
-			// Set the weight of the evaluator if the value was the same as the previous bid
+			double currentWeight = evaluator.getValue().getWeight();
+			
+			evaluator.getValue().setWeight(currentWeight - reducedWeight);
+			
 			if (sameValues.get(evaluator.getKey().toString())) {
-				evaluator.getValue().setWeight(defaultWeight + 0.1);
-			} else {
-				evaluator.getValue().setWeight(defaultWeight);
+				currentWeight = evaluator.getValue().getWeight();
+				evaluator.getValue().setWeight(currentWeight + (budgetToSame * worth.get(ranking)));
+				ranking++;
 			}
 			
 			// For each value in evaluator
@@ -168,5 +167,22 @@ public class Group13_OM extends OpponentModel {
 		Set<BOAparameter> set = new HashSet<BOAparameter>();
 		set.add(new BOAparameter("l", 0.2,"The learning coefficient determines how quickly the issue weights are learned"));
 		return set;
+	}
+	
+	private HashMap<String, Integer> sortByValue(HashMap<String, Integer> hashMap) {
+		List<Map.Entry<String, Integer>> linkedList = new LinkedList<Map.Entry<String, Integer>>(hashMap.entrySet());
+		Collections.sort(linkedList, new Comparator<Map.Entry<String, Integer> >() {
+            public int compare(Map.Entry<String, Integer> object1, 
+                               Map.Entry<String, Integer> object2)
+            {
+                return (object1.getValue()).compareTo(object2.getValue());
+            }
+        });
+          
+        HashMap<String, Integer> tempList = new LinkedHashMap<String, Integer>();
+        for (Map.Entry<String, Integer> temporary : linkedList) {
+        	tempList.put(temporary.getKey(), temporary.getValue());
+        }
+        return tempList;
 	}
 }
