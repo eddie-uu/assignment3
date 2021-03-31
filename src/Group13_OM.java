@@ -28,21 +28,25 @@ import genius.core.utility.EvaluatorDiscrete;
 public class Group13_OM extends OpponentModel {
 	private int amountOfIssues;
 	private HashMap<String, Integer> frequency;
+	private double totalNegotiationTime;
+	private double previousBiddingOfferTime;
 	private double minModifier;
 	private double maxModifier;
 	private double modifierScaling;
 	
 	@Override
 	public void init(NegotiationSession negotiationSession, Map<String, Double> parameters) {
-		this.negotiationSession = negotiationSession;
-		
-		opponentUtilitySpace = (AdditiveUtilitySpace) negotiationSession.getUtilitySpace().copy();
-		amountOfIssues 		 = opponentUtilitySpace.getDomain().getIssues().size();
-		frequency 			 = new HashMap<String, Integer>();
-		minModifier			 = 0.01;
-		maxModifier			 = 0.1;
-		modifierScaling		 = 0.001;
-		
+		this.negotiationSession   = negotiationSession;
+		this.opponentUtilitySpace = (AdditiveUtilitySpace) negotiationSession.getUtilitySpace().copy();
+		this.amountOfIssues       = opponentUtilitySpace.getDomain().getIssues().size();
+
+		totalNegotiationTime	 = negotiationSession.getTimeline().getTotalTime() * 0.05;
+		previousBiddingOfferTime = 0.0;
+		frequency 			 	 = new HashMap<String, Integer>();
+		minModifier			 	 = 0.01;
+		maxModifier			 	 = 0.1;
+		modifierScaling		 	 = 0.001;
+
 		generateModel();
 	}
 
@@ -71,15 +75,28 @@ public class Group13_OM extends OpponentModel {
 											.get(negotiationSession.getOpponentBidHistory().size() - 2);
 		Bid previousOpponentBidValues = previousOpponentBid.getBid();
 		
-		// Influence of time todo: scaling increasing with this
-		double totalTime = time;
-
+		double currentNegotiationTime = time - previousBiddingOfferTime;
+		double currentModifier = minModifier;
+		previousBiddingOfferTime = time;
+		
+		// If bid is 1/5 of the total time, increase
+		// For every second/round passed, modifier increases
+		if (negotiationSession.getTimeline().getType().name() == "Rounds") {
+			currentModifier = 1.5;
+		} else {
+			int multiplier = (int) (currentNegotiationTime / totalNegotiationTime); // 15, 5 = 3
+			currentModifier += (modifierScaling * multiplier);
+			
+			if (currentModifier > 2) {
+				currentModifier = maxModifier;
+			}
+		}
+		
 		// Current opponent's bid values it offered
 		Iterator<Entry<Integer, Value>> opponentBidIterator = opponentBid.getValues().entrySet().iterator();
-		ArrayList<String> bidValues = new ArrayList<String>();
-
-		List<Issue> opponentBidIssues = opponentBid.getIssues();
-		HashMap<String, Boolean> sameValues = new HashMap<String, Boolean>();
+		ArrayList<String> bidValues 					    = new ArrayList<String>();
+		List<Issue> opponentBidIssues 						= opponentBid.getIssues();
+		HashMap<String, Boolean> sameValues 				= new HashMap<String, Boolean>();
 
 		int sameBid = 0;
 		
@@ -101,8 +118,8 @@ public class Group13_OM extends OpponentModel {
 
 		
 		ArrayList<Integer> worth = new ArrayList<Integer>();
-		int budget = 0;
-		double best40Percent = sameBid * 0.6;
+		int budget 				 = 0;
+		double best40Percent 	 = sameBid * 0.6;
 		
 		for (int i = sameBid; i > 0; i--) {
 			int value = i > best40Percent ? i : 1;
@@ -110,14 +127,14 @@ public class Group13_OM extends OpponentModel {
 			budget += value;
 		}
 		
-		double budgetToSame  = amountOfIssues != sameBid ? maxModifier / budget : 0;
-		double reducedWeight = amountOfIssues != sameBid ? maxModifier / amountOfIssues : 0;
+		double budgetToSame  = amountOfIssues != sameBid ? currentModifier / budget : 0;
+		double reducedWeight = amountOfIssues != sameBid ? currentModifier / amountOfIssues : 0;
 		
 		frequency = sortByValue(frequency);
 		
 		// For each evaluator
 		int ranking = 0;
-		
+		double totalWeight = 0.0;
 		for (Entry<Objective, Evaluator> evaluator : opponentUtilitySpace.getEvaluators()) {
 			double currentWeight = evaluator.getValue().getWeight();
 			
@@ -128,6 +145,8 @@ public class Group13_OM extends OpponentModel {
 				evaluator.getValue().setWeight(currentWeight + (budgetToSame * worth.get(ranking)));
 				ranking++;
 			}
+			
+			totalWeight += evaluator.getValue().getWeight();
 			
 			// For each value in evaluator
 			for (ValueDiscrete valueDiscrete : ((IssueDiscrete) evaluator.getKey()).getValues()) {
@@ -140,12 +159,13 @@ public class Group13_OM extends OpponentModel {
 				if (bidValues.contains(valueDiscrete.getValue().toString())) {
 					currentValue += 1;
 				} else if (currentValue > 1) {
-					currentValue -= 1;
+					currentValue -= 1; // <- Is dit nodig?
 				}
 				
 				((EvaluatorDiscrete) evaluator.getValue()).setEvaluation(valueDiscrete, (int) currentValue);
 			}
 		}
+		System.out.println(totalWeight);
 	}
 
 	@Override
