@@ -44,6 +44,9 @@ public class Group13_OM extends OpponentModel {
 		generateModel();
 	}
 
+	/*
+	 * Generates the default of the predicted opponent model
+	 */
 	private void generateModel() {
 		double defaultWeight 	 = 1D / amountOfIssues;
 		previousBiddingOfferTime = 0.0;
@@ -63,20 +66,36 @@ public class Group13_OM extends OpponentModel {
 		}
 	}
 
+	/*
+	 * Updates the opponent model based on frequency an Value has been offered
+	 * Each time a Value has been offered, its evaluation will increase by on
+	 * 
+	 * Each time a Value is similar to the previous Value of an Issue, the weights
+	 * of the issues will increase or decrease
+	 */
 	@SuppressWarnings("rawtypes")
 	@Override
 	public void updateModel(Bid opponentBid, double time) {
+		
+		// Return if only one bid has been offered by the opponent in total
 		if (negotiationSession.getOpponentBidHistory().size() < 2) { return; }
 		
+		/*
+		 * previousOpponentBid 		 = previous bidDetails the opponent offered
+		 * previousOpponentBidValues = the bid within the bidDetails
+		 * currentNegotiationTime 	 = total time which has past between current and previous bid
+		 * currentModifier			 = modifier by which the weights will be influenced
+		 */
 		BidDetails previousOpponentBid = negotiationSession.getOpponentBidHistory()
 										 	.getHistory()
 											.get(negotiationSession.getOpponentBidHistory().size() - 2);
 		Bid previousOpponentBidValues = previousOpponentBid.getBid();
-		
 		double currentNegotiationTime = time - previousBiddingOfferTime;
 		double currentModifier 		  = minModifier;
 		previousBiddingOfferTime 	  = time;
 		
+		// Set default modifier to decrease all weights with in total if round based
+		// dynamic modifier if the negotiation is time based
 		if (negotiationSession.getTimeline().getType().name() == "Rounds") {
 			currentModifier = 1.5;
 		} else {
@@ -93,6 +112,8 @@ public class Group13_OM extends OpponentModel {
 		HashMap<String, Boolean> sameValues 				= new HashMap<String, Boolean>();
 		int sameBid 										= 0;
 		
+		// Evaluate each Value whether it was in the previous bid as well, increase the 
+		// frequency a issue has been offered
 		while (opponentBidIterator.hasNext()) {
 			Map.Entry pair 	 	 = (Map.Entry) opponentBidIterator.next();
 			Value comparison 	 = previousOpponentBidValues.getValue((int) pair.getKey());
@@ -109,6 +130,7 @@ public class Group13_OM extends OpponentModel {
 			opponentBidIterator.remove();
 		}
 
+		// Generate the rankings of which each issues' weight receives more value or less value
 		ArrayList<Integer> worth = new ArrayList<Integer>();
 		int budget 				 = 0;
 		double best40Percent 	 = sameBid * 0.6;
@@ -120,24 +142,31 @@ public class Group13_OM extends OpponentModel {
 			budget += value;
 		}
 		
+		/*
+		 * budgetToSame  = the base value with which each weight will be increased with without the ranking modifier
+		 * reducedWeight = the base value with which each weight will be decreased with before handing out the increase
+		 */
 		double budgetToSame  = amountOfIssues != sameBid ? currentModifier / budget : 0;
 		double reducedWeight = amountOfIssues != sameBid ? currentModifier / amountOfIssues : 0;
 		frequency 			 = sortByValue(frequency);
 		int ranking 		 = 0;
 		
-		// For each evaluator
+		// Update the opponent model evaluators
 		for (Entry<Objective, Evaluator> evaluator : opponentUtilitySpace.getEvaluators()) {
 			double currentWeight = evaluator.getValue().getWeight();
 			
+			// Reduce the weight with of the evaluator with the reducedWeight variable
 			evaluator.getValue().setWeight(currentWeight - reducedWeight);
 			
+			// Increase the weight with the budgetToSame * multiplier by ranking if the Value of
+			// current bid issue was the same as the previous bid issue
 			if (sameValues.get(evaluator.getKey().toString())) {
 				currentWeight = evaluator.getValue().getWeight();
 				evaluator.getValue().setWeight(currentWeight + (budgetToSame * worth.get(ranking)));
 				ranking++;
 			}
 			
-			// For each value in evaluator
+			// Increase the evaluation of each Value by one which was present in the current bid
 			for (ValueDiscrete valueDiscrete : ((IssueDiscrete) evaluator.getKey()).getValues()) {
 				double currentValue = 1;
 				try {
@@ -169,6 +198,9 @@ public class Group13_OM extends OpponentModel {
 	@Override
 	public Set<BOAparameter> getParameterSpec() { return new HashSet<BOAparameter>(); }
 	
+	/*
+	 * Sort HashMap from highest to lowest
+	 */
 	private HashMap<String, Integer> sortByValue(HashMap<String, Integer> hashMap) {
 		List<Map.Entry<String, Integer>> linkedList = new LinkedList<Map.Entry<String, Integer>>(hashMap.entrySet());
         HashMap<String, Integer> tempList 			= new LinkedHashMap<String, Integer>();

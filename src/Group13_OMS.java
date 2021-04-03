@@ -31,21 +31,34 @@ public class Group13_OMS extends OMStrategy {
 		}
 	}
 
+	/*
+	 * Return the best bid offerable to the opponent
+	 * allBids = the possible bids which we can offer to the opponent
+	 */
 	@SuppressWarnings("serial")
 	@Override
 	public BidDetails getBid(List<BidDetails> allBids) {
 		if (allBids.size() == 1) { return allBids.get(0); }
 		
+		/*
+		 * highestEvaluation = check what the utility is of the current bids available
+		 * bids 			 = all bids grouped by utility
+		 * frequency		 = total amount of times a Value is mentioned in the bids with the highest utility
+		 */
 		double highestEvaluation 							= Double.NEGATIVE_INFINITY;
 		HashMap<Double, ArrayList<BidDetails>> bids 		= new HashMap<Double, ArrayList<BidDetails>>();
 		HashMap<Integer, HashMap<Value, Integer>> frequency = new HashMap<Integer, HashMap<Value, Integer>>();
 		
+		// Generate HashMap values for bids and frequency
 		for (BidDetails currentBid : allBids) {
+			// Utility of the currentBid according to opponent model
 			double evaluation = model.getBidEvaluation(currentBid.getBid());
 
+			// Create new ArrayList object if HashMap key is new, or add bid if HashMap key already exists
 			if (bids.containsKey(evaluation)) {
 				bids.get(evaluation).add(currentBid);
 			} else {
+				// Update highestEvaluation, reset frequency HashMap
 				if (evaluation > highestEvaluation) {
 					highestEvaluation = evaluation;
 					frequency 		  = new HashMap<Integer, HashMap<Value, Integer>>();
@@ -54,6 +67,7 @@ public class Group13_OMS extends OMStrategy {
 				bids.put(evaluation, new ArrayList<BidDetails>(){{ add(currentBid); }});
 			}
 			
+			// Update frequency HashMap if currentBid has the same utility as the highestEvaluation
 			if (evaluation == highestEvaluation) {
 				for (Issue issue : currentBid.getBid().getIssues()) {
 					int issueId = issue.getNumber();
@@ -71,24 +85,36 @@ public class Group13_OMS extends OMStrategy {
 			}
 		}
 		
+		/*
+		 * highestBids		 = ArrayList with the highest bids
+		 * frequencyIterator = iterator to loop through
+		 * highestValues 	 = HashMap with the highest Value for each Issue
+		 */
 		ArrayList<BidDetails> highestBids 									= bids.get(highestEvaluation);
 		Iterator<Entry<Integer, HashMap<Value, Integer>>> frequencyIterator = frequency.entrySet().iterator();
 		HashMap<Integer, Value> highestValues 								= new HashMap<Integer, Value>();
 		
+		// Generate highestValues HashMap by specifying which Value was mentioned the most for each Issue
 		while (frequencyIterator.hasNext()) {
 			Map.Entry<Integer, HashMap<Value, Integer>> pair = (Map.Entry<Integer, HashMap<Value, Integer>>) frequencyIterator.next();
 			int key											 = pair.getKey();
 			HashMap<Value, Integer> value 					 = (HashMap<Value, Integer>) pair.getValue();
 			
+			// Obtain the Value from the HashMap value with the highest utility
 			Value highestValue = Collections.max(value.entrySet(), (entry1, entry2) -> entry1.getValue() - entry2.getValue()).getKey();
 			highestValues.put(key, highestValue);
 			frequencyIterator.remove();
 		}
 		
-		Random r 		   = new Random();
-		BidDetails bestBid = highestBids.get(r.nextInt(highestBids.size()));
+		/*
+		 * Initialize bestBid by giving it a random bid from the highestBids
+		 */
+		Random r 		   	 = new Random();
+		BidDetails bestBid 	 = highestBids.get(r.nextInt(highestBids.size()));
 		int mostSimilarities = -1;
 		
+		// Determine which bid of all highestBids had the most correlation with the frequency
+		// of which a Value was the most offered
 		for (BidDetails currentBid : highestBids) {
 			int similarity = 0;
 			for (Issue issue : currentBid.getBid().getIssues()) {
@@ -114,6 +140,7 @@ public class Group13_OMS extends OMStrategy {
 											negotiationSession.getUtilitySpace().getUtility(bestBid.getBid()),
 											negotiationSession.getTime());
 		
+		// Return the best bid
 		return nextBid;
 	}
 
