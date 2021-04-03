@@ -26,8 +26,8 @@ import genius.core.utility.Evaluator;
 import genius.core.utility.EvaluatorDiscrete;
 
 public class Group13_OM extends OpponentModel {
-	private int amountOfIssues;
 	private HashMap<String, Integer> frequency;
+	private int amountOfIssues;
 	private double totalNegotiationTime;
 	private double previousBiddingOfferTime;
 	private double minModifier;
@@ -39,19 +39,18 @@ public class Group13_OM extends OpponentModel {
 		this.negotiationSession   = negotiationSession;
 		this.opponentUtilitySpace = (AdditiveUtilitySpace) negotiationSession.getUtilitySpace().copy();
 		this.amountOfIssues       = opponentUtilitySpace.getDomain().getIssues().size();
-
-		totalNegotiationTime	 = negotiationSession.getTimeline().getTotalTime() * 0.05;
-		previousBiddingOfferTime = 0.0;
-		frequency 			 	 = new HashMap<String, Integer>();
-		minModifier			 	 = 0.01;
-		maxModifier			 	 = 0.1;
-		modifierScaling		 	 = 0.001;
+		this.totalNegotiationTime = negotiationSession.getTimeline().getTotalTime() * 0.05;
 
 		generateModel();
 	}
 
 	private void generateModel() {
-		double defaultWeight = 1D / amountOfIssues;
+		double defaultWeight 	 = 1D / amountOfIssues;
+		previousBiddingOfferTime = 0.0;
+		frequency 			 	 = new HashMap<String, Integer>();
+		minModifier			 	 = 0.01;
+		maxModifier			 	 = 0.1;
+		modifierScaling		 	 = 0.001;
 
 		for (Entry<Objective, Evaluator> evaluator : opponentUtilitySpace.getEvaluators()) {
 			opponentUtilitySpace.unlock(evaluator.getKey());
@@ -69,27 +68,22 @@ public class Group13_OM extends OpponentModel {
 	public void updateModel(Bid opponentBid, double time) {
 		if (negotiationSession.getOpponentBidHistory().size() < 2) { return; }
 		
-		
 		BidDetails previousOpponentBid = negotiationSession.getOpponentBidHistory()
 										 	.getHistory()
 											.get(negotiationSession.getOpponentBidHistory().size() - 2);
 		Bid previousOpponentBidValues = previousOpponentBid.getBid();
 		
 		double currentNegotiationTime = time - previousBiddingOfferTime;
-		double currentModifier = minModifier;
-		previousBiddingOfferTime = time;
+		double currentModifier 		  = minModifier;
+		previousBiddingOfferTime 	  = time;
 		
-		// If bid is 1/5 of the total time, increase
-		// For every second/round passed, modifier increases
 		if (negotiationSession.getTimeline().getType().name() == "Rounds") {
 			currentModifier = 1.5;
 		} else {
-			int multiplier = (int) (currentNegotiationTime / totalNegotiationTime); // 15, 5 = 3
+			int multiplier = (int) (currentNegotiationTime / totalNegotiationTime);
 			currentModifier += (modifierScaling * multiplier);
 			
-			if (currentModifier > 2) {
-				currentModifier = maxModifier;
-			}
+			if (currentModifier > 2) { currentModifier = maxModifier; }
 		}
 		
 		// Current opponent's bid values it offered
@@ -97,8 +91,7 @@ public class Group13_OM extends OpponentModel {
 		ArrayList<String> bidValues 					    = new ArrayList<String>();
 		List<Issue> opponentBidIssues 						= opponentBid.getIssues();
 		HashMap<String, Boolean> sameValues 				= new HashMap<String, Boolean>();
-
-		int sameBid = 0;
+		int sameBid 										= 0;
 		
 		while (opponentBidIterator.hasNext()) {
 			Map.Entry pair 	 	 = (Map.Entry) opponentBidIterator.next();
@@ -116,25 +109,23 @@ public class Group13_OM extends OpponentModel {
 			opponentBidIterator.remove();
 		}
 
-		
 		ArrayList<Integer> worth = new ArrayList<Integer>();
 		int budget 				 = 0;
 		double best40Percent 	 = sameBid * 0.6;
 		
 		for (int i = sameBid; i > 0; i--) {
 			int value = i > best40Percent ? i : 1;
+
 			worth.add(value);
 			budget += value;
 		}
 		
 		double budgetToSame  = amountOfIssues != sameBid ? currentModifier / budget : 0;
 		double reducedWeight = amountOfIssues != sameBid ? currentModifier / amountOfIssues : 0;
-		
-		frequency = sortByValue(frequency);
+		frequency 			 = sortByValue(frequency);
+		int ranking 		 = 0;
 		
 		// For each evaluator
-		int ranking = 0;
-		double totalWeight = 0.0;
 		for (Entry<Objective, Evaluator> evaluator : opponentUtilitySpace.getEvaluators()) {
 			double currentWeight = evaluator.getValue().getWeight();
 			
@@ -146,8 +137,6 @@ public class Group13_OM extends OpponentModel {
 				ranking++;
 			}
 			
-			totalWeight += evaluator.getValue().getWeight();
-			
 			// For each value in evaluator
 			for (ValueDiscrete valueDiscrete : ((IssueDiscrete) evaluator.getKey()).getValues()) {
 				double currentValue = 1;
@@ -155,17 +144,12 @@ public class Group13_OM extends OpponentModel {
 					currentValue = ((EvaluatorDiscrete) evaluator.getValue()).getEvaluation(valueDiscrete);
 				} catch (Exception e) { }
 				
-				// Increase or decrease value if offered in bid or not
-				if (bidValues.contains(valueDiscrete.getValue().toString())) {
-					currentValue += 1;
-				} else if (currentValue > 1) {
-					currentValue -= 1; // <- Is dit nodig?
-				}
+				// Increase value if offered in bid
+				if (bidValues.contains(valueDiscrete.getValue().toString())) { currentValue += 1; }
 				
 				((EvaluatorDiscrete) evaluator.getValue()).setEvaluation(valueDiscrete, (int) currentValue);
 			}
 		}
-		System.out.println(totalWeight);
 	}
 
 	@Override
@@ -183,26 +167,20 @@ public class Group13_OM extends OpponentModel {
 	public String getName() { return "Boaninho opponent model"; }
 
 	@Override
-	public Set<BOAparameter> getParameterSpec() {
-		Set<BOAparameter> set = new HashSet<BOAparameter>();
-		set.add(new BOAparameter("l", 0.2,"The learning coefficient determines how quickly the issue weights are learned"));
-		return set;
-	}
+	public Set<BOAparameter> getParameterSpec() { return new HashSet<BOAparameter>(); }
 	
 	private HashMap<String, Integer> sortByValue(HashMap<String, Integer> hashMap) {
 		List<Map.Entry<String, Integer>> linkedList = new LinkedList<Map.Entry<String, Integer>>(hashMap.entrySet());
+        HashMap<String, Integer> tempList 			= new LinkedHashMap<String, Integer>();
+
 		Collections.sort(linkedList, new Comparator<Map.Entry<String, Integer> >() {
-            public int compare(Map.Entry<String, Integer> object1, 
-                               Map.Entry<String, Integer> object2)
-            {
+            public int compare(Map.Entry<String, Integer> object1, Map.Entry<String, Integer> object2) {
                 return (object1.getValue()).compareTo(object2.getValue());
             }
         });
-          
-        HashMap<String, Integer> tempList = new LinkedHashMap<String, Integer>();
-        for (Map.Entry<String, Integer> temporary : linkedList) {
-        	tempList.put(temporary.getKey(), temporary.getValue());
-        }
+
+        for (Map.Entry<String, Integer> temporary : linkedList) { tempList.put(temporary.getKey(), temporary.getValue()); }
+        
         return tempList;
 	}
 }

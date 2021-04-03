@@ -1,6 +1,21 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <boaPartiesList>
-    <boaparties partyName="newParty">
+    <boaparties partyName="agentk">
+        <properties/>
+        <biddingStrategy>
+            <item classpath="negotiator.boaframework.offeringstrategy.anac2010.AgentK_Offering"/>
+        </biddingStrategy>
+        <acceptanceStrategy>
+            <item classpath="negotiator.boaframework.acceptanceconditions.anac2010.AC_AgentK"/>
+        </acceptanceStrategy>
+        <opponentModel>
+            <item classpath="negotiator.boaframework.opponentmodel.AgentLGModel"/>
+        </opponentModel>
+        <omStrategy>
+            <item classpath="negotiator.boaframework.omstrategy.NTFTstrategy"/>
+        </omStrategy>
+    </boaparties>
+    <boaparties partyName="BoaNinho">
         <properties/>
         <biddingStrategy>
             <item classpath="negotiator.boaframework.offeringstrategy.anac2010.AgentK_Offering"/>
@@ -13,7 +28,7 @@
             <item classpath="C:\Users\e-w19\eclipse-workspace\assignment3\target\classes\Group13_OM.class"/>
         </opponentModel>
         <omStrategy>
-            <item classpath="negotiator.boaframework.omstrategy.NTFTstrategy"/>
+            <item classpath="C:\Users\e-w19\eclipse-workspace\assignment3\target\classes\Group13_OMS.class"/>
         </omStrategy>
     </boaparties>
 </boaPartiesList>

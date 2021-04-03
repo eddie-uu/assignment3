@@ -103,6 +103,7 @@
 		<omstrategy description="Best bid" classpath="negotiator.boaframework.omstrategy.BestBid"/>
 		<omstrategy description="Random" classpath="negotiator.boaframework.omstrategy.NullStrategy"/>
 		<omstrategy description="Offer best n" classpath="negotiator.boaframework.omstrategy.OfferBestN"/>
+		<omstrategy description="Group13_OMS.class" classpath="C:\Users\e-w19\eclipse-workspace\assignment3\target\classes\Group13_OMS.class"/>
 		<omstrategy description="TheFawkes" classpath="negotiator.boaframework.omstrategy.TheFawkes_OMS"/>
 	</omstrategies>
 </repository>
