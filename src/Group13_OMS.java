@@ -9,6 +9,8 @@ import java.util.Random;
 import java.util.Set;
 import java.util.Map.Entry;
 
+import genius.core.Bid;
+import genius.core.Domain;
 import genius.core.bidding.BidDetails;
 import genius.core.boaframework.BOAparameter;
 import genius.core.boaframework.NegotiationSession;
@@ -106,38 +108,10 @@ public class Group13_OMS extends OMStrategy {
 			frequencyIterator.remove();
 		}
 		
-		/*
-		 * Initialize bestBid by giving it a random bid from the highestBids
-		 */
-		Random r 		   	 = new Random();
-		BidDetails bestBid 	 = highestBids.get(r.nextInt(highestBids.size()));
-		int mostSimilarities = -1;
-		
-		// Determine which bid of all highestBids had the most correlation with the frequency
-		// of which a Value was the most offered
-		for (BidDetails currentBid : highestBids) {
-			int similarity = 0;
-			for (Issue issue : currentBid.getBid().getIssues()) {
-				int issueId = issue.getNumber();				
-				Value issueValue = currentBid.getBid().getValue(issueId);
-				
-				Value highestValue = highestValues.get(issueId);
-
-				if (highestValue == issueValue) { similarity++; }
-			}
-			
-			if (similarity > mostSimilarities) {
-				mostSimilarities = similarity;
-				bestBid = currentBid;
-				System.out.println("Current best bid: " + bestBid.getBid());
-			}
-		}
-		
-		
-		System.out.println("Highest bid: " + bestBid.getBid());
-
-		BidDetails nextBid = new BidDetails(bestBid.getBid(),
-											negotiationSession.getUtilitySpace().getUtility(bestBid.getBid()),
+		// Create new bid with the best correlation of all the best possible bids
+		Bid newNextBid 	   = new Bid(highestBids.get(0).getBid().getDomain(), highestValues);
+		BidDetails nextBid = new BidDetails(newNextBid,
+											negotiationSession.getUtilitySpace().getUtility(newNextBid),
 											negotiationSession.getTime());
 		
 		// Return the best bid
