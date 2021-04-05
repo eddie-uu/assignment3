@@ -1,7 +1,0 @@
-<?xml version="1.0" ?><Session>
-<NegotiationOutcome currentTime="Fri Apr 02 14:47:30 CEST 2021" lastAction="(Offer  bid:Bid[Food: Catering, Drinks: Handmade Cocktails, Location: Party Room, Invitations: Plain, Music: Band, Cleanup: Water and Soap])" domain="etc/templates/partydomain/party_domain.xml" bids="120" runtime="0.3048123" finalOutcome="-" startingAgent="KLH@8" deadline="60rounds">
-<resultsOfAgent agent="KLH@8" agentDesc="ANAC2011" utilspace="etc/templates/partydomain/party1_utility.xml" agentClass="agents.anac.y2011.HardHeaded.KLH" userUtility="0.0" finalUtility="0.0" discountedUtility="0.0" discount="1.0" totalUserBother="0.0">
-</resultsOfAgent>
-<resultsOfAgent agent="boa-negotiator.boaframework.offeringstrategy.anac2011.HardHeaded_Offering-F..EclipseWorkspace.assignment3.target.classes.AC_BOAninho-negotiator.boaframework.opponentmodel.HardHeadedFrequencyModel_l-negotiator.boaframework.omstrategy.NTFTstrategy@9" agentDesc="BOA(2021 - BOAaninho,2011 - HardHeaded,HardHeaded Frequency Model,Offer Best Bids)" utilspace="etc/templates/partydomain/party2_utility.xml" agentClass="genius.core.repository.boa.BoaPartyRepItem$1" userUtility="0.0" finalUtility="0.0" discountedUtility="0.0" discount="1.0" totalUserBother="0.0">
-</resultsOfAgent>
-</NegotiationOutcome></Session>

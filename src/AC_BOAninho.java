@@ -11,13 +11,14 @@ public class AC_BOAninho extends AcceptanceStrategy {
 	
 	private double minAcceptanceUtility = 1.0;
 	private double concessionRate = 0.005;
+	private double maxConcessionrate = 0.005;
 	private double targetMinUtility = 1.0;
 	private double bestBid = 0.0;
 	private double opponentConcessionRate = 0.01;
 	private double roundsLeft = 60;
 	private double totalRounds = 60;
 	private double prevBidUtil = 0.5;
-	
+	private String timeBased = "";
 	
 	public AC_BOAninho() {
 	}
@@ -38,13 +39,16 @@ public class AC_BOAninho extends AcceptanceStrategy {
 		this.offeringStrategy = strat;	
 		totalRounds = negotiationSession.getTimeline().getTotalTime();
 		roundsLeft = totalRounds;
+		timeBased = negotiationSession.getTimeline().getType().name();	
+		//maxConsessionRate gets a minimum utility of 0.4
+		maxConcessionrate = 6/totalRounds/10;
 	}
 
 	@Override
 	public Actions determineAcceptability() {
 	
 		BidDetails opponentsLastBid = negotiationSession.getOpponentBidHistory().getLastBidDetails();
-					
+				
 //		System.out.println("Min Utility: " + minAcceptanceUtility);
 //		System.out.println("Utility: " +opponentsLastBid.getMyUndiscountedUtil());
 //		
@@ -53,10 +57,10 @@ public class AC_BOAninho extends AcceptanceStrategy {
 //			System.out.println("ACCEPT");
 			return Actions.Accept;
 		}
-		
-		//Safety net: if in the last 10% accept all bids above 0.95% of the best bid
-		if (roundsLeft/totalRounds<0.1 && bestBid * 0.95 < opponentsLastBid.getMyUndiscountedUtil()) {
-//			System.out.println("ACCEPT");
+		System.out.println(timeBased);
+		//Safety net: last bid or 5% if timebased
+		if ((timeBased.equals("Rounds") && roundsLeft == 0 || !timeBased.equals("Rounds") && roundsLeft/totalRounds<0.05) && bestBid * 0.95 < opponentsLastBid.getMyUndiscountedUtil()) {
+			System.out.println("ACCEPT");
 			return Actions.Accept;
 		}
 		
@@ -74,6 +78,9 @@ public class AC_BOAninho extends AcceptanceStrategy {
 		concessionRate = concessionRate-opponentConcessionRate;
 		if(concessionRate<0) {
 			concessionRate = 0;
+		}
+		if(concessionRate>maxConcessionrate) {
+			concessionRate = maxConcessionrate;
 		}
 		if(minAcceptanceUtility<bestBid) {
 			minAcceptanceUtility = bestBid;

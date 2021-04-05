@@ -1,7 +1,0 @@
-<?xml version="1.0" ?><Session>
-<NegotiationOutcome exception="Failed to execute protocol: Execution failed of AgentNP1@0:java.lang.NumberFormatException: For input string: &quot;1,00&quot;: For input string: &quot;1,00&quot;" currentTime="Fri Apr 02 15:03:21 CEST 2021" lastAction="null" bids="108" runtime="2.2704812" deadline="60rounds">
-<resultsOfAgent agent="AgentNP1" utilspace="etc/templates/partydomain/party1_utility.xml" agentClass="agents.anac.y2018.agentnp1.AgentNP1" finalUtility="0.0" discountedUtility="0.0" discount="1.0">
-</resultsOfAgent>
-<resultsOfAgent agent="boa-negotiator.boaframework.offeringstrategy.anac2011.HardHeaded_Offering-F..EclipseWorkspace.assignment3.target.classes.AC_BOAninho-negotiator.boaframework.opponentmodel.HardHeadedFrequencyModel_l-negotiator.boaframework.omstrategy.NTFTstrategy" utilspace="etc/templates/partydomain/party2_utility.xml" agentClass="BoaPartyRepItem[newParty,BOA[boa(negotiator.boaframework.offeringstrategy.anac2011.HardHeaded_Offering),[]],BOA[boa(F:\EclipseWorkspace\assignment3\target\classes\AC_BOAninho.class),[]],BOA[boa(negotiator.boaframework.opponentmodel.HardHeadedFrequencyModel),[l=0.2]],BOA[boa(negotiator.boaframework.omstrategy.NTFTstrategy),[]]]" finalUtility="0.0" discountedUtility="0.0" discount="1.0">
-</resultsOfAgent>
-</NegotiationOutcome></Session>

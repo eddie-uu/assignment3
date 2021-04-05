@@ -1,7 +1,0 @@
-<?xml version="1.0" ?><Session>
-<NegotiationOutcome currentTime="Fri Apr 02 14:31:29 CEST 2021" timeOfAgreement="0.9836065573770492" lastAction="(Accept  bid:Bid[Food: Handmade Food, Drinks: Handmade Cocktails, Location: Party Room, Invitations: Custom, Printed, Music: Band, Cleanup: Water and Soap])" domain="etc/templates/partydomain/party_domain.xml" bids="118" runtime="1.4329986" finalOutcome="Bid[Food: Handmade Food, Drinks: Handmade Cocktails, Location: Party Room, Invitations: Custom, Printed, Music: Band, Cleanup: Water and Soap]" startingAgent="NiceTitForTat@4" deadline="60rounds">
-<resultsOfAgent agent="NiceTitForTat@4" agentDesc="ANAC2011" utilspace="etc/templates/partydomain/party1_utility.xml" agentClass="agents.anac.y2011.Nice_Tit_for_Tat.NiceTitForTat" userUtility="0.6583333333333334" finalUtility="0.6583333333333334" discountedUtility="0.6583333333333334" discount="1.0" totalUserBother="0.0">
-</resultsOfAgent>
-<resultsOfAgent agent="KLH@5" agentDesc="ANAC2011" utilspace="etc/templates/partydomain/party2_utility.xml" agentClass="agents.anac.y2011.HardHeaded.KLH" userUtility="0.9401512488914268" finalUtility="0.9401512488914268" discountedUtility="0.9401512488914268" discount="1.0" totalUserBother="0.0">
-</resultsOfAgent>
-</NegotiationOutcome></Session>
