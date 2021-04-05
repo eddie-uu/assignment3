@@ -68,6 +68,7 @@
 		<acceptancecondition description="Other - Gap" classpath="negotiator.boaframework.acceptanceconditions.other.AC_Gap"/>
 		<acceptancecondition description="Other - Time" classpath="negotiator.boaframework.acceptanceconditions.other.AC_Time"/>
 		<acceptancecondition description="Other - True" classpath="negotiator.boaframework.acceptanceconditions.other.AC_True"/>
+		<acceptancecondition description="AC_BOAninho.class" classpath="C:\Users\e-w19\eclipse-workspace\assignment3\target\classes\AC_BOAninho.class"/>
 		<acceptancecondition description="2012 - OMACagent" classpath="negotiator.boaframework.acceptanceconditions.anac2012.AC_OMACagent"/>
 		<acceptancecondition description="2011 - IAMHaggler2011" classpath="negotiator.boaframework.acceptanceconditions.anac2011.AC_IAMHaggler2011"/>
 		<acceptancecondition description="2011 - The Negotiator" classpath="negotiator.boaframework.acceptanceconditions.anac2011.AC_TheNegotiator"/>
@@ -75,7 +76,6 @@
 	<opponentmodels>
 		<opponentmodel description="AgentLG Model" classpath="negotiator.boaframework.opponentmodel.AgentLGModel"/>
 		<opponentmodel description="Perfect Model" classpath="negotiator.boaframework.opponentmodel.PerfectModel"/>
-		<opponentmodel description="Boaninho" classpath="C:\Users\e-w19\eclipse-workspace\assignment3\target\classes\Group13_OM.class"/>
 		<opponentmodel description="The Negotiator Reloaded Model" classpath="negotiator.boaframework.opponentmodel.IAMhagglerBayesianModel"/>
 		<opponentmodel description="InoxAgent_OM" classpath="negotiator.boaframework.opponentmodel.InoxAgent_OM"/>
 		<opponentmodel description="FSEGA Bayesian Model" classpath="negotiator.boaframework.opponentmodel.FSEGABayesianModel"/>

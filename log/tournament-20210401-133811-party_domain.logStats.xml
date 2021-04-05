@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<agentsStatistics>
+    <statistics>
+        <agentname>agents.anac.y2011.HardHeaded.KLH</agentname>
+        <totalUndiscountedUtility>4.920213482896058</totalUndiscountedUtility>
+        <totalDiscountedUtility>4.920213482896058</totalDiscountedUtility>
+        <numberOfSessions>108</numberOfSessions>
+        <totalNashDist>129.22397980224747</totalNashDist>
+        <totalWelfare>9.840426965792116</totalWelfare>
+        <totalParetoDistance>116.29078392091292</totalParetoDistance>
+        <meanDiscounted>0.04555753224903757</meanDiscounted>
+        <meanNashDistance>1.1965183315022914</meanNashDistance>
+        <meanParetoDistance>1.0767665177862307</meanParetoDistance>
+        <meanUndiscounted>0.04555753224903757</meanUndiscounted>
+        <meanWelfare>0.09111506449807515</meanWelfare>
+    </statistics>
+</agentsStatistics>

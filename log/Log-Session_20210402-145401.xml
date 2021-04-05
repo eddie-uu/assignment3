@@ -1,0 +1,7 @@
+<?xml version="1.0" ?><Session>
+<NegotiationOutcome exception="Failed to execute protocol: Execution failed of Rubick@12:java.lang.NullPointerException: Cannot invoke &quot;genius.core.persistent.StandardInfoList.isEmpty()&quot; because &quot;this.history&quot; is null: Cannot invoke &quot;genius.core.persistent.StandardInfoList.isEmpty()&quot; because &quot;this.history&quot; is null" currentTime="Fri Apr 02 14:54:01 CEST 2021" lastAction="null" bids="4" runtime="0.0150576" deadline="60rounds">
+<resultsOfAgent agent="Rubick" utilspace="etc/templates/partydomain/party1_utility.xml" agentClass="agents.anac.y2017.rubick.Rubick" finalUtility="0.0" discountedUtility="0.0" discount="1.0">
+</resultsOfAgent>
+<resultsOfAgent agent="boa-negotiator.boaframework.offeringstrategy.anac2011.HardHeaded_Offering-F..EclipseWorkspace.assignment3.target.classes.AC_BOAninho-negotiator.boaframework.opponentmodel.HardHeadedFrequencyModel_l-negotiator.boaframework.omstrategy.NTFTstrategy" utilspace="etc/templates/partydomain/party2_utility.xml" agentClass="BoaPartyRepItem[newParty,BOA[boa(negotiator.boaframework.offeringstrategy.anac2011.HardHeaded_Offering),[]],BOA[boa(F:\EclipseWorkspace\assignment3\target\classes\AC_BOAninho.class),[]],BOA[boa(negotiator.boaframework.opponentmodel.HardHeadedFrequencyModel),[l=0.2]],BOA[boa(negotiator.boaframework.omstrategy.NTFTstrategy),[]]]" finalUtility="0.0" discountedUtility="0.0" discount="1.0">
+</resultsOfAgent>
+</NegotiationOutcome></Session>
