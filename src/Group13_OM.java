@@ -26,7 +26,7 @@ import genius.core.utility.Evaluator;
 import genius.core.utility.EvaluatorDiscrete;
 
 public class Group13_OM extends OpponentModel {
-	private HashMap<String, Integer> frequency;
+	private HashMap<String, HashMap<String, Integer>> frequency;
 	private int amountOfIssues;
 	private double totalNegotiationTime;
 	private double previousBiddingOfferTime;
@@ -50,7 +50,7 @@ public class Group13_OM extends OpponentModel {
 	private void generateModel() {
 		double defaultWeight 	 = 1D / amountOfIssues;
 		previousBiddingOfferTime = 0.0;
-		frequency 			 	 = new HashMap<String, Integer>();
+		frequency				 = new HashMap<String, HashMap<String, Integer>>();
 		minModifier			 	 = 0.01;
 		maxModifier			 	 = 0.1;
 		modifierScaling		 	 = 0.001;
@@ -58,10 +58,17 @@ public class Group13_OM extends OpponentModel {
 		for (Entry<Objective, Evaluator> evaluator : opponentUtilitySpace.getEvaluators()) {
 			opponentUtilitySpace.unlock(evaluator.getKey());
 			evaluator.getValue().setWeight(defaultWeight);
-			frequency.put(evaluator.getKey().toString(), 0);
 
 			for (ValueDiscrete valueDiscrete : ((IssueDiscrete) evaluator.getKey()).getValues()) {
 				((EvaluatorDiscrete) evaluator.getValue()).setEvaluation(valueDiscrete, 1);
+				
+				HashMap<String, Integer> newValue = new HashMap<String, Integer>();
+				newValue.put(valueDiscrete.getValue(), 0);
+				if (frequency.containsKey(evaluator.getKey().toString())) {
+					frequency.get(evaluator.getKey().toString()).put(valueDiscrete.getValue(), 0);
+				} else {
+					frequency.put(evaluator.getKey().toString(), newValue);
+				}
 			}
 		}
 	}
@@ -110,6 +117,7 @@ public class Group13_OM extends OpponentModel {
 		ArrayList<String> bidValues 					    = new ArrayList<String>();
 		List<Issue> opponentBidIssues 						= opponentBid.getIssues();
 		HashMap<String, Boolean> sameValues 				= new HashMap<String, Boolean>();
+		HashMap<String, Integer> highestIssues 				= new HashMap<String, Integer>();
 		int sameBid 										= 0;
 		
 		// Evaluate each Value whether it was in the previous bid as well, increase the 
@@ -118,10 +126,10 @@ public class Group13_OM extends OpponentModel {
 			Map.Entry pair 	 	 = (Map.Entry) opponentBidIterator.next();
 			Value comparison 	 = previousOpponentBidValues.getValue((int) pair.getKey());
 			Issue name 			 = opponentBidIssues.get((int) pair.getKey() - 1);
-			int currentFrequency = frequency.get(name.getName()) + 1;
+			int currentFrequency = frequency.get(name.getName()).get(comparison.toString()) + 1;
 
 			if (comparison == pair.getValue()) {
-				frequency.put(name.getName(), currentFrequency);
+				frequency.get(name.getName()).put(comparison.toString(), currentFrequency);
 				sameBid++;
 			}
 			
@@ -129,17 +137,32 @@ public class Group13_OM extends OpponentModel {
 			sameValues.put(name.getName(), comparison == pair.getValue());
 			opponentBidIterator.remove();
 		}
-
-		// Generate the rankings of which each issues' weight receives more value or less value
-		ArrayList<Integer> worth = new ArrayList<Integer>();
-		int budget 				 = 0;
-		double best40Percent 	 = sameBid * 0.6;
 		
-		for (int i = sameBid; i > 0; i--) {
-			int value = i > best40Percent ? i : 1;
+		// Generate highestIssues HashMap by specifying which Value was mentioned the most for each Issue
+		frequency.entrySet().forEach(entry -> {
+			String key = entry.getKey();
+			if (sameValues.get(key)) {
+				HashMap<String, Integer> value 	= (HashMap<String, Integer>) entry.getValue();
+				int highestValue 				= Collections.max(value.entrySet(), (entry1, entry2) -> entry1.getValue() - entry2.getValue()).getValue();
+				
+				highestIssues.put(key, highestValue);
+			}
+		});
 
-			worth.add(value);
-			budget += value;
+		
+		// Generate the rankings of which each issues' weight receives more value or less value
+		HashMap<String, Integer> orderedHighestIssues = sortByValue(highestIssues);
+		HashMap<String, Integer> worth 				  = new HashMap<String, Integer>();
+		Object[] keys 								  = orderedHighestIssues.keySet().toArray();
+		int budget 				 					  = 0;
+		double best40Percent 	 					  = sameBid * 0.6;
+		
+		for (int i = 0; i < sameBid; i++) {
+			int value = i > best40Percent ? i : 1;
+			Object key = keys[i];
+			worth.put(key.toString(), value);
+			
+			budget+= value;
 		}
 		
 		/*
@@ -148,9 +171,7 @@ public class Group13_OM extends OpponentModel {
 		 */
 		double budgetToSame  = amountOfIssues != sameBid ? currentModifier / budget : 0;
 		double reducedWeight = amountOfIssues != sameBid ? currentModifier / amountOfIssues : 0;
-		frequency 			 = sortByValue(frequency);
-		int ranking 		 = 0;
-		
+
 		// Update the opponent model evaluators
 		for (Entry<Objective, Evaluator> evaluator : opponentUtilitySpace.getEvaluators()) {
 			double currentWeight = evaluator.getValue().getWeight();
@@ -162,8 +183,7 @@ public class Group13_OM extends OpponentModel {
 			// current bid issue was the same as the previous bid issue
 			if (sameValues.get(evaluator.getKey().toString())) {
 				currentWeight = evaluator.getValue().getWeight();
-				evaluator.getValue().setWeight(currentWeight + (budgetToSame * worth.get(ranking)));
-				ranking++;
+				evaluator.getValue().setWeight(currentWeight + (budgetToSame * worth.get(evaluator.getKey().toString())));
 			}
 			
 			// Increase the evaluation of each Value by one which was present in the current bid
@@ -193,7 +213,7 @@ public class Group13_OM extends OpponentModel {
 	}
 
 	@Override
-	public String getName() { return "Boaninho opponent model"; }
+	public String getName() { return "2021 - BOAaninho"; }
 
 	@Override
 	public Set<BOAparameter> getParameterSpec() { return new HashSet<BOAparameter>(); }

@@ -109,7 +109,7 @@ public class Group13_OMS extends OMStrategy {
 		}
 		
 		// Create new bid with the best correlation of all the best possible bids
-		Bid newNextBid 	   = new Bid(highestBids.get(0).getBid().getDomain(), highestValues);
+		Bid newNextBid = new Bid(highestBids.get(0).getBid().getDomain(), highestValues);
 		return new BidDetails(newNextBid, negotiationSession.getUtilitySpace().getUtility(newNextBid), negotiationSession.getTime());
 	}
 

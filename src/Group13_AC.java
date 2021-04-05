@@ -7,7 +7,7 @@ import genius.core.boaframework.OfferingStrategy;
 import genius.core.boaframework.OpponentModel;
 
 
-public class AC_BOAninho extends AcceptanceStrategy {
+public class Group13_AC extends AcceptanceStrategy {
 	
 	private double minAcceptanceUtility = 1.0;
 	private double concessionRate = 0.005;
@@ -20,7 +20,7 @@ public class AC_BOAninho extends AcceptanceStrategy {
 	private double prevBidUtil = 0.5;
 	private String timeBased = "";
 	
-	public AC_BOAninho() {
+	public Group13_AC() {
 	}
 
 	/**
@@ -28,7 +28,7 @@ public class AC_BOAninho extends AcceptanceStrategy {
 	 * @params negotiationSession,offeringStrategy
 	* 	@return nothing, its a constructor lol
 	*/
-	public AC_BOAninho(NegotiationSession negotiationSession, OfferingStrategy offeringStrategy)  throws Exception {
+	public Group13_AC(NegotiationSession negotiationSession, OfferingStrategy offeringStrategy)  throws Exception {
 		init(negotiationSession, offeringStrategy, null, null);
 	}
 
