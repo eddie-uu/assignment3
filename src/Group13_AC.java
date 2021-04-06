@@ -17,6 +17,7 @@ public class Group13_AC extends AcceptanceStrategy {
 	private double totalRounds = 60;
 	private double prevBidUtil = 0.5;
 	private String timeBased = "";
+	private double consessionFactor = 0.5;
 	
 	public Group13_AC() { }
 
@@ -49,7 +50,7 @@ public class Group13_AC extends AcceptanceStrategy {
 //		System.out.println("Utility: " +opponentsLastBid.getMyUndiscountedUtil());
 //		
 		//If the bid is above the minimum threshold and at least 1/e rounds are passed the bid is accepted
-		if (opponentsLastBid != null && (opponentsLastBid.getMyUndiscountedUtil() > minAcceptanceUtility) && roundsLeft/totalRounds<0.63) {
+		if (opponentsLastBid != null && (opponentsLastBid.getMyUndiscountedUtil() > minAcceptanceUtility) && roundsLeft/totalRounds<0.36) {
 //			System.out.println("ACCEPT");
 			return Actions.Accept;
 		}
@@ -68,7 +69,7 @@ public class Group13_AC extends AcceptanceStrategy {
 			opponentConcessionRate = 0;
 		}
 		//concede based on the difference between the minimum utility and the expected target, adjusted by rounds
-		concessionRate = (minAcceptanceUtility - targetMinUtility)*(totalRounds - roundsLeft)/totalRounds;
+		concessionRate = (minAcceptanceUtility - targetMinUtility)*(totalRounds - roundsLeft)/totalRounds*consessionFactor;
 		roundsLeft -= 1;
 		//concede less if opponent has a high concession rate
 		concessionRate = concessionRate-opponentConcessionRate;
