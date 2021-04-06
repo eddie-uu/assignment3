@@ -7,6 +7,7 @@
 		<biddingstrategy description="2012 - BRAMAgent2" classpath="negotiator.boaframework.offeringstrategy.anac2012.BRAMAgent2_Offering"/>
 		<biddingstrategy description="2012 - The Negotiator Reloaded" classpath="negotiator.boaframework.offeringstrategy.anac2012.TheNegotiatorReloaded_Offering"/>
 		<biddingstrategy description="2011 - Agent K2" classpath="negotiator.boaframework.offeringstrategy.anac2011.AgentK2_Offering"/>
+		<biddingstrategy description="Group13_BS.class" classpath="C:\Users\e-w19\eclipse-workspace\assignment3\target\classes\Group13_BS.class"/>
 		<biddingstrategy description="2012 - IAMHaggler2012" classpath="negotiator.boaframework.offeringstrategy.anac2012.IAMHaggler2012_Offering"/>
 		<biddingstrategy description="Other - Time dependent" classpath="negotiator.boaframework.offeringstrategy.other.TimeDependent_Offering"/>
 		<biddingstrategy description="Other - Random walker" classpath="negotiator.boaframework.offeringstrategy.other.Random_Offering"/>

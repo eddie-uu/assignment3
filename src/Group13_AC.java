@@ -6,9 +6,7 @@ import genius.core.boaframework.NegotiationSession;
 import genius.core.boaframework.OfferingStrategy;
 import genius.core.boaframework.OpponentModel;
 
-
 public class Group13_AC extends AcceptanceStrategy {
-	
 	private double minAcceptanceUtility = 1.0;
 	private double concessionRate = 0.005;
 	private double maxConcessionrate = 0.005;
@@ -20,8 +18,7 @@ public class Group13_AC extends AcceptanceStrategy {
 	private double prevBidUtil = 0.5;
 	private String timeBased = "";
 	
-	public Group13_AC() {
-	}
+	public Group13_AC() { }
 
 	/**
 	 * BOAconstructor
@@ -29,14 +26,12 @@ public class Group13_AC extends AcceptanceStrategy {
 	* 	@return nothing, its a constructor lol
 	*/
 	public Group13_AC(NegotiationSession negotiationSession, OfferingStrategy offeringStrategy)  throws Exception {
-		System.out.println("wanneer wordt dit ding gerunnt");
 		init(negotiationSession, offeringStrategy, null, null);
 	}
 
 	@Override
 	public void init(NegotiationSession negoSession, OfferingStrategy strat, OpponentModel opponentModel,
 			Map<String, Double> parameters) throws Exception {
-		System.out.println("wanneer wordt dit ding lol");
 		this.negotiationSession = negoSession;
 		this.offeringStrategy = strat;	
 		totalRounds = negotiationSession.getTimeline().getTotalTime();
@@ -48,7 +43,6 @@ public class Group13_AC extends AcceptanceStrategy {
 
 	@Override
 	public Actions determineAcceptability() {
-	
 		BidDetails opponentsLastBid = negotiationSession.getOpponentBidHistory().getLastBidDetails();
 				
 //		System.out.println("Min Utility: " + minAcceptanceUtility);
@@ -100,7 +94,5 @@ public class Group13_AC extends AcceptanceStrategy {
 	}
 
 	@Override
-	public String getName() {
-		return "2021 - BOAninho";
-	}
+	public String getName() { return "2021 - BOAninho"; }
 }
