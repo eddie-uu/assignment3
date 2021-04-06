@@ -120,5 +120,5 @@ public class Group13_OMS extends OMStrategy {
 	public Set<BOAparameter> getParameterSpec() { return new HashSet<BOAparameter>(); }
 
 	@Override
-	public String getName() { return "Boaninho opponent model strategy"; }
+	public String getName() { return "2021 - BOAninho"; }
 }

@@ -29,12 +29,14 @@ public class Group13_AC extends AcceptanceStrategy {
 	* 	@return nothing, its a constructor lol
 	*/
 	public Group13_AC(NegotiationSession negotiationSession, OfferingStrategy offeringStrategy)  throws Exception {
+		System.out.println("wanneer wordt dit ding gerunnt");
 		init(negotiationSession, offeringStrategy, null, null);
 	}
 
 	@Override
 	public void init(NegotiationSession negoSession, OfferingStrategy strat, OpponentModel opponentModel,
 			Map<String, Double> parameters) throws Exception {
+		System.out.println("wanneer wordt dit ding lol");
 		this.negotiationSession = negoSession;
 		this.offeringStrategy = strat;	
 		totalRounds = negotiationSession.getTimeline().getTotalTime();
@@ -99,6 +101,6 @@ public class Group13_AC extends AcceptanceStrategy {
 
 	@Override
 	public String getName() {
-		return "2021 - BOAaninho";
+		return "2021 - BOAninho";
 	}
 }

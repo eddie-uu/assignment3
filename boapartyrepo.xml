@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <boaPartiesList>
-    <boaparties partyName="Boaninho">
+    <boaparties partyName="newParty">
         <properties/>
         <biddingStrategy>
             <item classpath="negotiator.boaframework.offeringstrategy.anac2010.AgentK_Offering"/>
         </biddingStrategy>
         <acceptanceStrategy>
-            <item classpath="C:\Users\e-w19\eclipse-workspace\assignment3\target\classes\AC_BOAninho.class"/>
+            <item classpath="C:\Users\e-w19\eclipse-workspace\assignment3\target\classes\Group13_AC.class"/>
         </acceptanceStrategy>
         <opponentModel>
             <item classpath="C:\Users\e-w19\eclipse-workspace\assignment3\target\classes\Group13_OM.class"/>

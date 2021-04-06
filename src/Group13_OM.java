@@ -128,12 +128,10 @@ public class Group13_OM extends OpponentModel {
 			Issue name 			 = opponentBidIssues.get((int) pair.getKey() - 1);
 			int currentFrequency = frequency.get(name.getName()).get(comparison.toString()) + 1;
 
-			if (comparison == pair.getValue()) {
-				frequency.get(name.getName()).put(comparison.toString(), currentFrequency);
-				sameBid++;
-			}
+			if (comparison == pair.getValue()) { sameBid++; }
 			
 			bidValues.add(pair.getValue().toString());
+			frequency.get(name.getName()).put(comparison.toString(), currentFrequency);
 			sameValues.put(name.getName(), comparison == pair.getValue());
 			opponentBidIterator.remove();
 		}
@@ -213,7 +211,7 @@ public class Group13_OM extends OpponentModel {
 	}
 
 	@Override
-	public String getName() { return "2021 - BOAaninho"; }
+	public String getName() { return "2021 - BOAninho"; }
 
 	@Override
 	public Set<BOAparameter> getParameterSpec() { return new HashSet<BOAparameter>(); }
