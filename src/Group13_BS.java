@@ -11,20 +11,11 @@ import genius.core.boaframework.SortedOutcomeSpace;
 import genius.core.misc.Range;
 
 public class Group13_BS extends OfferingStrategy{
-//	The init method of the offering strategy is automatically called by the BOA framework with
-//	four parameters: the negotiation session, the opponent model, the opponent model strategy, and the parameters of the
-//	component.
-	SortedOutcomeSpace outcomespace;
+	private SortedOutcomeSpace outcomespace;
 	
-	private double halfTime;
-	private double Pmin; // minimum desired utility
-	private double Roundsleft =0;
-	private double Timeleft = 0;
-	private OpponentModel opponentModel;
-
 	public Group13_BS() { }
 	
-	public Group13_BS(NegotiationSession negotationSession, OpponentModel model, OMStrategy oms) throws Exception{
+	public Group13_BS(NegotiationSession negotationSession, OpponentModel model, OMStrategy oms) throws Exception {
 		init(negotiationSession, model,oms, null);
 	}
 	
@@ -48,9 +39,8 @@ public class Group13_BS extends OfferingStrategy{
 
 	public double getCurrentTime() { return negotiationSession.getTimeline().getCurrentTime(); }
 
-    //Experiment begint hier
 	public BidDetails returnBidfromList(List<BidDetails> givenlist){
-		Random rand = new Random();
+		Random rand 			   = new Random();
 	    BidDetails randombiddetail = givenlist.get(rand.nextInt(givenlist.size()));
 	    
 	    return randombiddetail;
@@ -67,24 +57,17 @@ public class Group13_BS extends OfferingStrategy{
 		double currenttime 	 = getCurrentTime();
 		double halftotaltime = totaltime/2;
 		
-		// if half of the time has passed
+		// If half of the time has passed
     	if( halftotaltime > currenttime) {
     		return returnBidfromList(UtilityGoalOptions(0.95));
-    	} else { // if more time is left
+    	} else { // If more time is left
+    		// Take the minimal utility and decrease it based on the time passed until a certain limit
     		double newcurrenttime =  (currenttime - halftotaltime);
+    		double newUtil 		  = 0.95 - ( 0.20 * Math.pow(newcurrenttime/(halftotaltime),3));	
     		
-    		// je neemt je minimale utility en die gaat omlaag naarmate de tijd vordert tot het maximum dat je wil. 
-    		double newutil = 0.95 -( 0.20 * Math.pow(newcurrenttime/(halftotaltime),3));		
-    		
-    		return omStrategy.getBid(UtilityGoalOptions(newutil));
-    	}
-		
+    		return omStrategy.getBid(UtilityGoalOptions(newUtil));
+    	}	
 	}
-	// first create list of all bids
-	// then find the bids with an utility higher than the target utility
-	// adapt the minimum treshold for the target utility to the highest utility attainable up to now 
-	
-////// Experiment eindigt hier
 	
 	@Override
 	public String getName() { return "2021 - BOAninho"; }

@@ -19,25 +19,25 @@ import genius.core.utility.EvaluatorDiscrete;
 
 /**
  * Info voor nu:
- * "BOA components can be made into an independent
- *  * negotiation party and which can handle preference uncertainty.
+ * "BOA components can be made into an independent negotiation party and
+ *  which can handle preference uncertainty.
  * 
  * Note that this is equivalent to adding a BOA party via the GUI by selecting
  * the components and parameters. However, this method gives more control over
  * the implementation, as the agent designer can choose to override behavior
  * (such as handling preference uncertainty)."
- * <p>
+ *
  */
-@SuppressWarnings("serial")
 
-public class boaparty_boaninho extends BoaParty {
+@SuppressWarnings("serial")
+public class Boaparty_boaninho extends BoaParty {
 	@Override
 	public void init(NegotiationInfo info) {
 		// The choice for each component is made here
 		AcceptanceStrategy ac = new Group13_AC();
-		OfferingStrategy os = new Group13_BS();
-		OpponentModel om = new Group13_OM();
-		OMStrategy oms = new Group13_OMS();
+		OfferingStrategy os   = new Group13_BS();
+		OpponentModel om 	  = new Group13_OM();
+		OMStrategy oms 		  = new Group13_OMS();
 
 		// All component parameters can be set below.
 		Map<String, Double> noparams = Collections.emptyMap();
@@ -78,9 +78,9 @@ public class boaparty_boaninho extends BoaParty {
 						b += 1;
 					}
 				}
-				a = newbidlist.size() - 1 - a; // maakt het aflopend ipv oplopend
-				counter.put(w, new int[] { a, b }); // eerste waarde is de 'waarde die het voor ons heeft', tweede
-													// waarde is hoe vaak het is voorgekomen
+				
+				a = newbidlist.size() - 1 - a; // Makes it descending instead of ascending
+				counter.put(w, new int[] { a, b }); // First value is the Value, second value is the frequency
 			}
 			
 			List<Integer> stdlist = new ArrayList<Integer>();
@@ -89,7 +89,7 @@ public class boaparty_boaninho extends BoaParty {
 			for (ValueDiscrete v : i.getValues()) {
 				int w = newev.getValue(v);
 				stdlist.add(counter.get(w)[0] * counter.get(w)[1]); // add value to list to calculate weights with of this issue
-				additiveUtilitySpaceFactory.setUtility(i, v, counter.get(w)[0]);// issue, value, valuescore
+				additiveUtilitySpaceFactory.setUtility(i, v, counter.get(w)[0]); // issue, value, valuescore
 			}
 			
 			// set weight of issue
@@ -107,8 +107,7 @@ public class boaparty_boaninho extends BoaParty {
 		additiveUtilitySpaceFactory.scaleAllValuesFrom0To1();
 		additiveUtilitySpaceFactory.normalizeWeights();
 		
-		// The factory is done with setting all parameters, now return the estimated
-		//  utility space
+		// The factory is done with setting all parameters, now return the estimated utility space
 		return additiveUtilitySpaceFactory.getUtilitySpace();
 	}
 
