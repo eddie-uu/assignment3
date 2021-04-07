@@ -55,9 +55,10 @@ public class Group13_AC extends AcceptanceStrategy {
 		if (opponentsLastBid != null && roundsLeft/totalRounds<0.1 && bestBid * 0.95 < opponentsLastBid.getMyUndiscountedUtil()){
 			return Actions.Accept;
 		}
-
+		BidHistory recentBids = negotiationSession.getOpponentBidHistory().filterBetweenTime(now - timeLeft, now);
+		int expectedBids = recentBids.size();
 		// Safety net: last bid or 5% if timebased
-		if (opponentsLastBid != null && (timeBased.equals("Rounds") && roundsLeft == 0 || !timeBased.equals("Rounds") && roundsLeft/totalRounds < 0.05) ) {
+		if (opponentsLastBid != null && expectedBids<=1 ) {
 			return Actions.Accept;
 		}
 		
