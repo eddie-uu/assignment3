@@ -74,8 +74,8 @@ public class Group13_BS extends OfferingStrategy{
     		double newcurrenttime =  (currenttime - halftotaltime);
     		
     		// je neemt je minimale utility en die gaat omlaag naarmate de tijd vordert tot het maximum dat je wil. 
-    		double newutil = 0.95 -( 0.20 * Math.pow(newcurrenttime/(halftotaltime-newcurrenttime),3));
-    				
+    		double newutil = 0.95 -( 0.20 * Math.pow(newcurrenttime/(halftotaltime),3));		
+    		
     		return omStrategy.getBid(UtilityGoalOptions(newutil));
     	}
 		

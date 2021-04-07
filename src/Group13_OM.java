@@ -46,6 +46,7 @@ public class Group13_OM extends OpponentModel {
 
 	/*
 	 * Generates the default of the predicted opponent model
+	 * @return void
 	 */
 	private void generateModel() {
 		double defaultWeight 	 = 1D / amountOfIssues;
@@ -147,7 +148,6 @@ public class Group13_OM extends OpponentModel {
 			}
 		});
 
-		
 		// Generate the rankings of which each issues' weight receives more value or less value
 		HashMap<String, Integer> orderedHighestIssues = sortByValue(highestIssues);
 		HashMap<String, Integer> worth 				  = new HashMap<String, Integer>();
@@ -218,6 +218,8 @@ public class Group13_OM extends OpponentModel {
 	
 	/*
 	 * Sort HashMap from highest to lowest
+	 * @parameters hashMap which is to be sorted
+	 * @return sorted hashMap
 	 */
 	private HashMap<String, Integer> sortByValue(HashMap<String, Integer> hashMap) {
 		List<Map.Entry<String, Integer>> linkedList = new LinkedList<Map.Entry<String, Integer>>(hashMap.entrySet());

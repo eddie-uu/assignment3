@@ -55,6 +55,7 @@ public class Group13_AC extends AcceptanceStrategy {
 		}
 		System.out.println(timeBased);
 		//Safety net: last bid or 5% if timebased
+		System.out.println(roundsLeft/totalRounds + " " + roundsLeft + " " + totalRounds);
 		if ((timeBased.equals("Rounds") && roundsLeft == 0 || !timeBased.equals("Rounds") && roundsLeft/totalRounds<0.05) && bestBid * 0.95 < opponentsLastBid.getMyUndiscountedUtil()) {
 			System.out.println("ACCEPT");
 			return Actions.Accept;
@@ -69,7 +70,7 @@ public class Group13_AC extends AcceptanceStrategy {
 		}
 		//concede based on the difference between the minimum utility and the expected target, adjusted by rounds
 		concessionRate = (minAcceptanceUtility - targetMinUtility)*(totalRounds - roundsLeft)/totalRounds;
-		roundsLeft -= 1;
+		roundsLeft -= timeBased.equals("Rounds") ? 1 : negotiationSession.getTime();
 		//concede less if opponent has a high concession rate
 		concessionRate = concessionRate-opponentConcessionRate;
 		if(concessionRate<0) {

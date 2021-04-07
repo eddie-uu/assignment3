@@ -20,17 +20,12 @@ import genius.core.issue.Issue;
 import genius.core.issue.Value;
 
 public class Group13_OMS extends OMStrategy {
-
 	double updateThreshold = 1.1;
 
 	@Override
 	public void init(NegotiationSession negotiationSession, OpponentModel model, Map<String, Double> parameters) {
 		super.init(negotiationSession, model, parameters);
-		if (parameters.get("t") != null) {
-			updateThreshold = parameters.get("t").doubleValue();
-		} else {
-			System.out.println("OMStrategy assumed t = 1.1");
-		}
+		if (parameters.get("t") != null) { updateThreshold = parameters.get("t").doubleValue(); }
 	}
 
 	/*

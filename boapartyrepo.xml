@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <boaPartiesList>
-    <boaparties partyName="newParty">
+    <boaparties partyName="BOAninho">
         <properties/>
         <biddingStrategy>
             <item classpath="C:\Users\e-w19\eclipse-workspace\assignment3\target\classes\Group13_BS.class"/>
