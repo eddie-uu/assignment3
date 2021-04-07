@@ -21,17 +21,14 @@ public class Group13_AC extends AcceptanceStrategy {
 	
 	public Group13_AC() { }
 
-	/**
-	 * BOAconstructor
-	 * @params negotiationSession,offeringStrategy
-	* 	@return nothing, its a constructor lol
-	*/
+	
 	public Group13_AC(NegotiationSession negotiationSession, OfferingStrategy offeringStrategy)  throws Exception {
 		init(negotiationSession, offeringStrategy, null, null);
 	}
 
 	@Override
-	public void init(NegotiationSession negoSession, OfferingStrategy strat, OpponentModel opponentModel, Map<String, Double> parameters) throws Exception {
+	public void init(NegotiationSession negoSession, OfferingStrategy strat, OpponentModel opponentModel,
+			Map<String, Double> parameters) throws Exception {
 		this.negotiationSession = negoSession;
 		this.offeringStrategy   = strat;	
 		this.totalRounds 	    = negotiationSession.getTimeline().getTotalTime();
@@ -46,14 +43,21 @@ public class Group13_AC extends AcceptanceStrategy {
 	public Actions determineAcceptability() {
 		BidDetails opponentsLastBid = negotiationSession.getOpponentBidHistory().getLastBidDetails();
 		
+		//If the utility is at 0.98 or higher Accept, not likely that it will increase
+		if (opponentsLastBid != null && opponentsLastBid.getMyUndiscountedUtil() >0.98) {
+			return Actions.Accept;
+		}
 		// If the bid is above the minimum threshold and at least 1/e rounds are passed the bid is accepted
 		if (opponentsLastBid != null && (opponentsLastBid.getMyUndiscountedUtil() > minAcceptanceUtility) && roundsLeft/totalRounds < 0.63) {
 			return Actions.Accept;
 		} 
+		//In the last 10% accept bids at 95% or higher of the best seen bid utility
+		if (opponentsLastBid != null && roundsLeft/totalRounds<0.1 && bestBid * 0.95 < opponentsLastBid.getMyUndiscountedUtil()){
+			return Actions.Accept;
+		}
 
 		// Safety net: last bid or 5% if timebased
-		if ((timeBased.equals("Rounds") && roundsLeft == 0 || !timeBased.equals("Rounds") && roundsLeft/totalRounds < 0.05) && bestBid * 0.95 < opponentsLastBid.getMyUndiscountedUtil()) {
-			System.out.println("ACCEPT");
+		if (opponentsLastBid != null && (timeBased.equals("Rounds") && roundsLeft == 0 || !timeBased.equals("Rounds") && roundsLeft/totalRounds < 0.05) ) {
 			return Actions.Accept;
 		}
 		
