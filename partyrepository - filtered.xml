@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<repository fileName="partyrepository.xml">
+    <items>
+        <agentRepItems/>
+        <partyRepItems>
+            <partyRepItem classPath="C:\Users\e-w19\eclipse-workspace\assignment3\target\classes\Boaparty_boaninho.class" strategyParameters="">
+                <properties/>
+            </partyRepItem>
+            <partyRepItem classPath="agents.anac.y2011.HardHeaded.KLH" strategyParameters="">
+                <properties/>
+            </partyRepItem>
+            <partyRepItem classPath="agents.anac.y2011.IAMhaggler2011.IAMhaggler2011" strategyParameters="">
+                <properties/>
+            </partyRepItem>
+            <partyRepItem classPath="agents.anac.y2011.Gahboninho.Gahboninho" strategyParameters="">
+                <properties/>
+            </partyRepItem>
+        </partyRepItems>
+        <domainRepItem/>
+        <protocolRepItem/>
+        <multiPartyProtocolRepItem/>
+    </items>
+</repository>

@@ -11,6 +11,7 @@ import genius.core.boaframework.OfferingStrategy;
 import genius.core.boaframework.OpponentModel;
 import genius.core.Bid;
 import genius.core.issue.IssueDiscrete;
+import genius.core.issue.Value;
 import genius.core.issue.ValueDiscrete;
 import genius.core.parties.NegotiationInfo;
 import genius.core.uncertainty.AdditiveUtilitySpaceFactory;
@@ -53,41 +54,46 @@ public class Boaparty_boaninho extends BoaParty {
 
 	@Override
 	public AbstractUtilitySpace estimateUtilitySpace() {
-		EvaluatorDiscrete newev = new EvaluatorDiscrete();
 		AdditiveUtilitySpaceFactory additiveUtilitySpaceFactory = new AdditiveUtilitySpaceFactory(getDomain());
 		List<IssueDiscrete> issues = additiveUtilitySpaceFactory.getIssues();
-
+		HashMap<Value, Integer> idHash = new HashMap<Value, Integer>();
 		// Looks at every issue
+		int id = 0;
 		for (IssueDiscrete i : issues) {
 			additiveUtilitySpaceFactory.setWeight(i, 1.0 / issues.size());
 
 			HashMap<Integer, int[]> counter = new HashMap<Integer, int[]>();
-			int a = 0;// hashmap vervangen hiermee
-			int b = 0;// hashmap vervangen hiermee
-			
 			// Looks at every value 
 			for (ValueDiscrete v : i.getValues()) {
-				int w = newev.getValue(v);
-
+				int a = 0;
+				int b = 0;
+				idHash.put(v, id);
+				
 				List<Bid> newbidlist = userModel.getBidRanking().getBidOrder();
-				Collections.reverse(newbidlist);
-
+				double size 		 = newbidlist.size();
+				boolean existing 	 = false;
+				
 				for (int j = 0; j < newbidlist.size(); j++) {
 					if (newbidlist.get(j).containsValue(i, v)) {
+						existing = true;
 						a += j - b;
 						b += 1;
 					}
 				}
-				
-				a = newbidlist.size() - 1 - a; // Makes it descending instead of ascending
-				counter.put(w, new int[] { a, b }); // First value is the Value, second value is the frequency
+
+				if (existing) {
+					counter.put(id, new int[] { a, b }); // First value is the Value, second value is the frequency
+				} else {
+					counter.put(id, new int[] { (int) size, 0 });
+				}
+				id++;
 			}
 			
 			List<Integer> stdlist = new ArrayList<Integer>();
-			
+
 			// Looks at every value 
 			for (ValueDiscrete v : i.getValues()) {
-				int w = newev.getValue(v);
+				int w = idHash.get(v);
 				stdlist.add(counter.get(w)[0] * counter.get(w)[1]); // add value to list to calculate weights with of this issue
 				additiveUtilitySpaceFactory.setUtility(i, v, counter.get(w)[0]); // issue, value, valuescore
 			}
@@ -96,9 +102,11 @@ public class Boaparty_boaninho extends BoaParty {
 			double sum  = stdlist.stream().mapToInt(Integer::intValue).sum();
 			double mean = sum / stdlist.size();
 			double std 	= 0;
-			
+			double size2 = stdlist.size();
+
 			for(double k : stdlist) { std += Math.pow(mean-k,2); }
-			std= Math.sqrt((std)/(stdlist.size()-1));
+			
+			std = Math.sqrt((std)/(size2-1));
 
 			additiveUtilitySpaceFactory.setWeight(i, std);
 		}

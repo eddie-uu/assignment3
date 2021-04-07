@@ -49,7 +49,7 @@ public class Group13_AC extends AcceptanceStrategy {
 		// If the bid is above the minimum threshold and at least 1/e rounds are passed the bid is accepted
 		if (opponentsLastBid != null && (opponentsLastBid.getMyUndiscountedUtil() > minAcceptanceUtility) && roundsLeft/totalRounds < 0.36) {
 			return Actions.Accept;
-		}
+		} 
 
 		// Safety net: last bid or 5% if timebased
 		if ((timeBased.equals("Rounds") && roundsLeft == 0 || !timeBased.equals("Rounds") && roundsLeft/totalRounds < 0.05) && bestBid * 0.95 < opponentsLastBid.getMyUndiscountedUtil()) {

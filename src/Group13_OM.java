@@ -196,7 +196,7 @@ public class Group13_OM extends OpponentModel {
 				
 				((EvaluatorDiscrete) evaluator.getValue()).setEvaluation(valueDiscrete, (int) currentValue);
 			}
-		}
+		} 
 	}
 
 	@Override

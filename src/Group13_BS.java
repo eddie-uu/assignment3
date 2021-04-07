@@ -26,6 +26,7 @@ public class Group13_BS extends OfferingStrategy{
 		this.omStrategy 		= oms;
 		this.outcomespace 		= new SortedOutcomeSpace(negotiationSession.getUtilitySpace());
 		negoSession.setOutcomeSpace(outcomespace);
+		
 	}
 
 	@Override
