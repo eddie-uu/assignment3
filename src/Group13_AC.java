@@ -17,7 +17,7 @@ public class Group13_AC extends AcceptanceStrategy {
 	private double totalRounds = 60;
 	private double prevBidUtil = 0.5;
 	private String timeBased = "";
-	private double consessionFactor = 0.5;
+	private double consessionFactor = 0.8;
 	
 	public Group13_AC() { }
 
@@ -47,7 +47,7 @@ public class Group13_AC extends AcceptanceStrategy {
 		BidDetails opponentsLastBid = negotiationSession.getOpponentBidHistory().getLastBidDetails();
 		
 		// If the bid is above the minimum threshold and at least 1/e rounds are passed the bid is accepted
-		if (opponentsLastBid != null && (opponentsLastBid.getMyUndiscountedUtil() > minAcceptanceUtility) && roundsLeft/totalRounds < 0.36) {
+		if (opponentsLastBid != null && (opponentsLastBid.getMyUndiscountedUtil() > minAcceptanceUtility) && roundsLeft/totalRounds < 0.63) {
 			return Actions.Accept;
 		} 
 
