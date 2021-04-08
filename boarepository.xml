@@ -42,6 +42,7 @@
 		<acceptancecondition description="2011 - Agent K2" classpath="negotiator.boaframework.acceptanceconditions.anac2011.AC_AgentK2"/>
 		<acceptancecondition description="Other - Previous" classpath="negotiator.boaframework.acceptanceconditions.other.AC_Previous"/>
 		<acceptancecondition description="Multi Acceptance Criteria" classpath="genius.core.boaframework.Multi_AcceptanceCondition"/>
+		<acceptancecondition description="Group13_AS.class" classpath="C:\Users\e-w19\eclipse-workspace\assignment3\target\classes\Group13_AS.class"/>
 		<acceptancecondition description="2012 - IAMHaggler2012" classpath="negotiator.boaframework.acceptanceconditions.anac2012.AC_IAMHaggler2012"/>
 		<acceptancecondition description="Other - Uncertain" classpath="negotiator.boaframework.acceptanceconditions.other.AC_Uncertain"/>
 		<acceptancecondition description="2011 - BRAMAgent" classpath="negotiator.boaframework.acceptanceconditions.anac2011.AC_BRAMAgent"/>
@@ -53,7 +54,6 @@
 		<acceptancecondition description="Other - Constant" classpath="negotiator.boaframework.acceptanceconditions.other.AC_Const"/>
 		<acceptancecondition description="2013 - InoxAgent" classpath="negotiator.boaframework.acceptanceconditions.anac2013.AC_InoxAgent"/>
 		<acceptancecondition description="2010 - Nozomi" classpath="negotiator.boaframework.acceptanceconditions.anac2010.AC_Nozomi"/>
-		<acceptancecondition description="Group13_AC.class" classpath="C:\Users\e-w19\eclipse-workspace\assignment3\target\classes\Group13_AC.class"/>
 		<acceptancecondition description="2011 - Gahboninho" classpath="negotiator.boaframework.acceptanceconditions.anac2011.AC_Gahboninho"/>
 		<acceptancecondition description="Other - False" classpath="negotiator.boaframework.acceptanceconditions.other.AC_False"/>
 		<acceptancecondition description="2010 - Agent FSEGA" classpath="negotiator.boaframework.acceptanceconditions.anac2010.AC_AgentFSEGA"/>

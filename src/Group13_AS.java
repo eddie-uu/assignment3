@@ -6,7 +6,7 @@ import genius.core.boaframework.NegotiationSession;
 import genius.core.boaframework.OfferingStrategy;
 import genius.core.boaframework.OpponentModel;
 
-public class Group13_AC extends AcceptanceStrategy {
+public class Group13_AS extends AcceptanceStrategy {
 	private double minAcceptanceUtility = 1.0;
 	private double concessionRate = 0.005;
 	private double maxConcessionrate = 0.005;
@@ -19,10 +19,10 @@ public class Group13_AC extends AcceptanceStrategy {
 	private String timeBased = "";
 	private double consessionFactor = 0.8;
 	
-	public Group13_AC() { }
+	public Group13_AS() { }
 
 	
-	public Group13_AC(NegotiationSession negotiationSession, OfferingStrategy offeringStrategy)  throws Exception {
+	public Group13_AS(NegotiationSession negotiationSession, OfferingStrategy offeringStrategy)  throws Exception {
 		init(negotiationSession, offeringStrategy, null, null);
 	}
 
@@ -55,22 +55,19 @@ public class Group13_AC extends AcceptanceStrategy {
 		if (opponentsLastBid != null && roundsLeft/totalRounds<0.1 && bestBid * 0.95 < opponentsLastBid.getMyUndiscountedUtil()){
 			return Actions.Accept;
 		}
-		BidHistory recentBids = negotiationSession.getOpponentBidHistory().filterBetweenTime(now - timeLeft, now);
-		int expectedBids = recentBids.size();
-		// Safety net: last bid or 5% if timebased
-		if (opponentsLastBid != null && expectedBids<=1 ) {
-			return Actions.Accept;
-		}
 		
-		// Calculate the expected opponent concession rate based on the last two bids, used to balance our concession rate
-		opponentConcessionRate = opponentsLastBid.getMyUndiscountedUtil() - prevBidUtil;
+		// Safety net: last bid or 5% if timebased
+		if (opponentsLastBid != null && (timeBased.equals("Rounds") && roundsLeft == 0 || !timeBased.equals("Rounds") && roundsLeft/totalRounds < 0.05) ) {
+			// Calculate the expected opponent concession rate based on the last two bids, used to balance our concession rate
+			opponentConcessionRate = opponentsLastBid.getMyUndiscountedUtil() - prevBidUtil;
+		}
 		
 		targetMinUtility += opponentConcessionRate;
 		
 		if (opponentConcessionRate < 0) { opponentConcessionRate = 0; }
 		
 		// concede based on the difference between the minimum utility and the expected target, adjusted by rounds
-		concessionRate = (minAcceptanceUtility - targetMinUtility) * (totalRounds - roundsLeft) / totalRounds * consessionFactor;
+		concessionRate = ((minAcceptanceUtility - targetMinUtility)/totalRounds*12)*(totalRounds - roundsLeft)/totalRounds;
 		roundsLeft 	  -= timeBased.equals("Rounds") ? 1 : negotiationSession.getTime();
 		
 		//concede less if opponent has a high concession rate
