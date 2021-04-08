@@ -7,7 +7,7 @@
 		<biddingstrategy description="2012 - BRAMAgent2" classpath="negotiator.boaframework.offeringstrategy.anac2012.BRAMAgent2_Offering"/>
 		<biddingstrategy description="2012 - The Negotiator Reloaded" classpath="negotiator.boaframework.offeringstrategy.anac2012.TheNegotiatorReloaded_Offering"/>
 		<biddingstrategy description="2011 - Agent K2" classpath="negotiator.boaframework.offeringstrategy.anac2011.AgentK2_Offering"/>
-		<biddingstrategy description="Group13_BS.class" classpath="C:\Users\e-w19\eclipse-workspace\assignment3\target\classes\Group13_BS.class"/>
+		<biddingstrategy description="Group10_BS.class" classpath="C:\Users\e-w19\eclipse-workspace\assignment3\target\classes\Group10_BS.class"/>
 		<biddingstrategy description="2012 - IAMHaggler2012" classpath="negotiator.boaframework.offeringstrategy.anac2012.IAMHaggler2012_Offering"/>
 		<biddingstrategy description="Other - Time dependent" classpath="negotiator.boaframework.offeringstrategy.other.TimeDependent_Offering"/>
 		<biddingstrategy description="Other - Random walker" classpath="negotiator.boaframework.offeringstrategy.other.Random_Offering"/>
@@ -38,11 +38,11 @@
 		<acceptancecondition description="2010 - Yushu" classpath="negotiator.boaframework.acceptanceconditions.anac2010.AC_Yushu"/>
 		<acceptancecondition description="2012 - BRAMAgent2" classpath="negotiator.boaframework.acceptanceconditions.anac2012.AC_BRAMAgent2"/>
 		<acceptancecondition description="2012 - AgentLG" classpath="negotiator.boaframework.acceptanceconditions.anac2012.AC_AgentLG"/>
+		<acceptancecondition description="Group10_AS.class" classpath="C:\Users\e-w19\eclipse-workspace\assignment3\target\classes\Group10_AS.class"/>
 		<acceptancecondition description="2012 - The Negotiator Reloaded" classpath="negotiator.boaframework.acceptanceconditions.anac2012.AC_TheNegotiatorReloaded"/>
 		<acceptancecondition description="2011 - Agent K2" classpath="negotiator.boaframework.acceptanceconditions.anac2011.AC_AgentK2"/>
 		<acceptancecondition description="Other - Previous" classpath="negotiator.boaframework.acceptanceconditions.other.AC_Previous"/>
 		<acceptancecondition description="Multi Acceptance Criteria" classpath="genius.core.boaframework.Multi_AcceptanceCondition"/>
-		<acceptancecondition description="Group13_AS.class" classpath="C:\Users\e-w19\eclipse-workspace\assignment3\target\classes\Group13_AS.class"/>
 		<acceptancecondition description="2012 - IAMHaggler2012" classpath="negotiator.boaframework.acceptanceconditions.anac2012.AC_IAMHaggler2012"/>
 		<acceptancecondition description="Other - Uncertain" classpath="negotiator.boaframework.acceptanceconditions.other.AC_Uncertain"/>
 		<acceptancecondition description="2011 - BRAMAgent" classpath="negotiator.boaframework.acceptanceconditions.anac2011.AC_BRAMAgent"/>
@@ -80,6 +80,7 @@
 		<opponentmodel description="The Negotiator Reloaded Model" classpath="negotiator.boaframework.opponentmodel.IAMhagglerBayesianModel"/>
 		<opponentmodel description="InoxAgent_OM" classpath="negotiator.boaframework.opponentmodel.InoxAgent_OM"/>
 		<opponentmodel description="FSEGA Bayesian Model" classpath="negotiator.boaframework.opponentmodel.FSEGABayesianModel"/>
+		<opponentmodel description="Group10_OM.class" classpath="C:\Users\e-w19\eclipse-workspace\assignment3\target\classes\Group10_OM.class"/>
 		<opponentmodel description="Perfect IAMhaggler Bay. Model" classpath="negotiator.boaframework.opponentmodel.PerfectIAMhagglerBayesianModel"/>
 		<opponentmodel description="Opposite Model" classpath="negotiator.boaframework.opponentmodel.OppositeModel"/>
 		<opponentmodel description="Scalable Bayesian Model" classpath="negotiator.boaframework.opponentmodel.ScalableBayesianModel"/>
@@ -93,7 +94,6 @@
 		<opponentmodel description="AgentX Frequency Model" classpath="negotiator.boaframework.opponentmodel.AgentXFrequencyModel"/>
 		<opponentmodel description="TheFawkes_OM" classpath="negotiator.boaframework.opponentmodel.TheFawkes_OM"/>
 		<opponentmodel description="Smith Frequency Model" classpath="negotiator.boaframework.opponentmodel.SmithFrequencyModel"/>
-		<opponentmodel description="Group13_OM.class" classpath="C:\Users\e-w19\eclipse-workspace\assignment3\target\classes\Group13_OM.class"/>
 		<opponentmodel description="Smith Frequency Model V2" classpath="negotiator.boaframework.opponentmodel.SmithFrequencyModelV2"/>
 		<opponentmodel description="Perfect Scalable Bay. Model" classpath="negotiator.boaframework.opponentmodel.PerfectScalableBayesianModel"/>
 		<opponentmodel description="CUHKFrequencyModelV2" classpath="negotiator.boaframework.opponentmodel.CUHKFrequencyModelV2"/>
@@ -103,8 +103,8 @@
 		<omstrategy description="NTFT" classpath="negotiator.boaframework.omstrategy.NTFTstrategy"/>
 		<omstrategy description="Best bid" classpath="negotiator.boaframework.omstrategy.BestBid"/>
 		<omstrategy description="Random" classpath="negotiator.boaframework.omstrategy.NullStrategy"/>
+		<omstrategy description="Group10_OMS.class" classpath="C:\Users\e-w19\eclipse-workspace\assignment3\target\classes\Group10_OMS.class"/>
 		<omstrategy description="Offer best n" classpath="negotiator.boaframework.omstrategy.OfferBestN"/>
-		<omstrategy description="Group13_OMS.class" classpath="C:\Users\e-w19\eclipse-workspace\assignment3\target\classes\Group13_OMS.class"/>
 		<omstrategy description="TheFawkes" classpath="negotiator.boaframework.omstrategy.TheFawkes_OMS"/>
 	</omstrategies>
 </repository>

@@ -3,16 +3,16 @@
     <boaparties partyName="BOAninho">
         <properties/>
         <biddingStrategy>
-            <item classpath="C:\Users\e-w19\eclipse-workspace\assignment3\target\classes\Group13_BS.class"/>
+            <item classpath="C:\Users\e-w19\eclipse-workspace\assignment3\target\classes\Group10_BS.class"/>
         </biddingStrategy>
         <acceptanceStrategy>
-            <item classpath="C:\Users\e-w19\eclipse-workspace\assignment3\target\classes\Group13_AS.class"/>
+            <item classpath="C:\Users\e-w19\eclipse-workspace\assignment3\target\classes\Group10_AS.class"/>
         </acceptanceStrategy>
         <opponentModel>
-            <item classpath="C:\Users\e-w19\eclipse-workspace\assignment3\target\classes\Group13_OM.class"/>
+            <item classpath="C:\Users\e-w19\eclipse-workspace\assignment3\target\classes\Group10_OM.class"/>
         </opponentModel>
         <omStrategy>
-            <item classpath="C:\Users\e-w19\eclipse-workspace\assignment3\target\classes\Group13_OMS.class"/>
+            <item classpath="C:\Users\e-w19\eclipse-workspace\assignment3\target\classes\Group10_OMS.class"/>
         </omStrategy>
     </boaparties>
 </boaPartiesList>

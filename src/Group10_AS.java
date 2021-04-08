@@ -6,7 +6,7 @@ import genius.core.boaframework.NegotiationSession;
 import genius.core.boaframework.OfferingStrategy;
 import genius.core.boaframework.OpponentModel;
 
-public class Group13_AS extends AcceptanceStrategy {
+public class Group10_AS extends AcceptanceStrategy {
 	private double minAcceptanceUtility = 1.0;
 	private double concessionRate = 0.005;
 	private double maxConcessionrate = 0.005;
@@ -19,10 +19,10 @@ public class Group13_AS extends AcceptanceStrategy {
 	private String timeBased = "";
 	private double consessionFactor = 0.8;
 	
-	public Group13_AS() { }
+	public Group10_AS() { }
 
 	
-	public Group13_AS(NegotiationSession negotiationSession, OfferingStrategy offeringStrategy)  throws Exception {
+	public Group10_AS(NegotiationSession negotiationSession, OfferingStrategy offeringStrategy)  throws Exception {
 		init(negotiationSession, offeringStrategy, null, null);
 	}
 

@@ -10,12 +10,12 @@ import genius.core.boaframework.OpponentModel;
 import genius.core.boaframework.SortedOutcomeSpace;
 import genius.core.misc.Range;
 
-public class Group13_BS extends OfferingStrategy{
+public class Group10_BS extends OfferingStrategy{
 	private SortedOutcomeSpace outcomespace;
 	
-	public Group13_BS() { }
+	public Group10_BS() { }
 	
-	public Group13_BS(NegotiationSession negotationSession, OpponentModel model, OMStrategy oms) throws Exception {
+	public Group10_BS(NegotiationSession negotationSession, OpponentModel model, OMStrategy oms) throws Exception {
 		init(negotiationSession, model,oms, null);
 	}
 	

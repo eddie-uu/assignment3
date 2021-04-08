@@ -35,10 +35,10 @@ public class Boaparty_boaninho extends BoaParty {
 	@Override
 	public void init(NegotiationInfo info) {
 		// The choice for each component is made here
-		AcceptanceStrategy ac = new Group13_AS();
-		OfferingStrategy os   = new Group13_BS();
-		OpponentModel om 	  = new Group13_OM();
-		OMStrategy oms 		  = new Group13_OMS();
+		AcceptanceStrategy ac = new Group10_AS();
+		OfferingStrategy os   = new Group10_BS();
+		OpponentModel om 	  = new Group10_OM();
+		OMStrategy oms 		  = new Group10_OMS();
 
 		// All component parameters can be set below.
 		Map<String, Double> noparams = Collections.emptyMap();

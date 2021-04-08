@@ -25,7 +25,7 @@ import genius.core.utility.AdditiveUtilitySpace;
 import genius.core.utility.Evaluator;
 import genius.core.utility.EvaluatorDiscrete;
 
-public class Group13_OM extends OpponentModel {
+public class Group10_OM extends OpponentModel {
 	private HashMap<String, HashMap<String, Integer>> frequency;
 	private int amountOfIssues;
 	private double totalNegotiationTime;

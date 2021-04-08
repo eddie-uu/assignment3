@@ -19,7 +19,7 @@ import genius.core.boaframework.OpponentModel;
 import genius.core.issue.Issue;
 import genius.core.issue.Value;
 
-public class Group13_OMS extends OMStrategy {
+public class Group10_OMS extends OMStrategy {
 	double updateThreshold = 1.1;
 
 	@Override
